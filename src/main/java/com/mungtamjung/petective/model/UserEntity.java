@@ -20,7 +20,11 @@ public class UserEntity {
     private String id; //자동 지정 id
 
     @Column(nullable=false)
-    private String email;  //유저가 회원가입 시 지정
+    private String email;
 
+    @Column(nullable=false)
     private String password;
+
+    @Column(nullable=false)
+    private String username;
 }

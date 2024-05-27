@@ -37,12 +37,14 @@ public class UserController {
             UserEntity user=UserEntity.builder()
                     .password(passwordEncoder.encode(userDTO.getPassword()))
                     .email(userDTO.getEmail())
+                    .username(userDTO.getUsername())
                     .build();
 
             UserEntity registerUser = userService.create(user);
             UserDTO responseUserDTO = UserDTO.builder()
                     .id(registerUser.getId())
                     .email(registerUser.getEmail())
+                    .username(userDTO.getUsername())
                     .build();
 
             return ResponseEntity.ok().body(responseUserDTO);
@@ -64,6 +66,7 @@ public class UserController {
             final UserDTO responseUserDTO = userDTO.builder()
                     .email(user.getEmail())
                     .id(user.getId())
+                    .username(userDTO.getUsername())
                     .token(token)
                     .build();
             return ResponseEntity.ok().body(responseUserDTO);
