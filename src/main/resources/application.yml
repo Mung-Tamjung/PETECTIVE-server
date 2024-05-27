@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: petective
+
+jwt:
+  issuer: mungtamjung
+  secret_key: pectectivemungtamjungpectectivemungtamjungpectectivemungtamjung

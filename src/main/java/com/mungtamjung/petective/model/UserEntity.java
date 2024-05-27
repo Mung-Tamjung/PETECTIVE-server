@@ -12,7 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "userid")})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 public class UserEntity {
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -20,7 +20,7 @@ public class UserEntity {
     private String id; //자동 지정 id
 
     @Column(nullable=false)
-    private String userid;  //유저가 회원가입 시 지정
+    private String email;  //유저가 회원가입 시 지정
 
     private String password;
 }
