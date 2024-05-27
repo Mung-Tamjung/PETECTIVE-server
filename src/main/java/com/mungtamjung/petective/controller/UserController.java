@@ -3,10 +3,13 @@ package com.mungtamjung.petective.controller;
 import com.mungtamjung.petective.dto.ResponseDTO;
 import com.mungtamjung.petective.dto.UserDTO;
 import com.mungtamjung.petective.model.UserEntity;
+import com.mungtamjung.petective.security.TokenProvider;
 import com.mungtamjung.petective.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TokenProvider tokenProvider;
+
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     @PostMapping("/signup")
     public ResponseEntity<?> registUser(@RequestBody UserDTO userDTO){
         try{
@@ -27,14 +35,14 @@ public class UserController {
                 throw new RuntimeException("Invalid Password value");
             }
             UserEntity user=UserEntity.builder()
-                    .userid(userDTO.getUserid())
-                    .password(userDTO.getPassword())
+                    .password(passwordEncoder.encode(userDTO.getPassword()))
+                    .email(userDTO.getEmail())
                     .build();
 
             UserEntity registerUser = userService.create(user);
             UserDTO responseUserDTO = UserDTO.builder()
                     .id(registerUser.getId())
-                    .userid(registerUser.getUserid())
+                    .email(registerUser.getEmail())
                     .build();
 
             return ResponseEntity.ok().body(responseUserDTO);
@@ -47,14 +55,16 @@ public class UserController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticate(@RequestBody UserDTO userDTO){
         UserEntity user = userService.getByCredentials(
-                userDTO.getUserid(),
-                userDTO.getPassword()
+                userDTO.getEmail(),
+                userDTO.getPassword(), passwordEncoder
         );
 
         if(user!=null){
+            final String token=tokenProvider.createToken(user);
             final UserDTO responseUserDTO = userDTO.builder()
-                    .userid(user.getUserid())
+                    .email(user.getEmail())
                     .id(user.getId())
+                    .token(token)
                     .build();
             return ResponseEntity.ok().body(responseUserDTO);
         }else{
