@@ -15,13 +15,18 @@ public class UserService {
     private UserRepository userRepository;
 
     public UserEntity create(final UserEntity userEntity){
-        if(userEntity ==null || userEntity.getEmail()==null){
+        if(userEntity ==null || userEntity.getEmail()==null || userEntity.getUsername()==null || userEntity.getPassword()==null){
             throw new RuntimeException("Invalid arguements");
         }
         final String email = userEntity.getEmail();
+        final String username = userEntity.getUsername();
+        final String password = userEntity.getPassword();
         if(userRepository.existsByEmail(email)){
             log.warn("User email already exists {}", email);
             throw new RuntimeException("User email already exists");
+        }else if(userRepository.existsByUsername(username)){
+            log.warn("Username already exists {}", username);
+            throw new RuntimeException("Username already exists");
         }
         return userRepository.save(userEntity);
     }

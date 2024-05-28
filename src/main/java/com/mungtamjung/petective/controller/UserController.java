@@ -34,6 +34,8 @@ public class UserController {
         try{
             if(userDTO == null || userDTO.getPassword()==null){
                 throw new RuntimeException("Invalid Password value");
+            } else if(userDTO.getPassword().length() < 12){
+                throw new RuntimeException("Insecure Password");
             }
             UserEntity user=UserEntity.builder()
                     .password(passwordEncoder.encode(userDTO.getPassword()))
