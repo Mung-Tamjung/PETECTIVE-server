@@ -42,8 +42,13 @@ public class UserController {
                     .build();
 
             UserEntity registerUser = userService.create(user);
+            UserDTO responseUserDTO = UserDTO.builder()
+                    .id(registerUser.getId())
+                    .email(registerUser.getEmail())
+                    .username(userDTO.getUsername())
+                    .build();
 
-            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, registerUser);
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, responseUserDTO);
 
             return ResponseEntity.ok().body(responseDTO);
         }catch(Exception e){
@@ -63,7 +68,14 @@ public class UserController {
         if(user!=null){
             final String token=tokenProvider.createToken(user);
 
-            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, user);
+            final UserDTO responseUserDTO = userDTO.builder()
+                    .email(user.getEmail())
+                    .id(user.getId())
+                    .username(userDTO.getUsername())
+                    .token(token)
+                    .build();
+
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, responseUserDTO);
 
             return ResponseEntity.ok().body(responseDTO);
         }else{
