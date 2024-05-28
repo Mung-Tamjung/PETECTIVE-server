@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @Slf4j
 @RestController
 @RequestMapping("auth")
@@ -47,9 +48,12 @@ public class UserController {
                     .username(userDTO.getUsername())
                     .build();
 
-            return ResponseEntity.ok().body(responseUserDTO);
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, responseUserDTO);
+
+            return ResponseEntity.ok().body(responseDTO);
         }catch(Exception e){
-            ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
+
+            ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
             return ResponseEntity.badRequest().body(responseDTO);
         }
     }
@@ -63,17 +67,19 @@ public class UserController {
 
         if(user!=null){
             final String token=tokenProvider.createToken(user);
+
             final UserDTO responseUserDTO = userDTO.builder()
                     .email(user.getEmail())
                     .id(user.getId())
                     .username(userDTO.getUsername())
                     .token(token)
                     .build();
-            return ResponseEntity.ok().body(responseUserDTO);
+
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, responseUserDTO);
+
+            return ResponseEntity.ok().body(responseDTO);
         }else{
-            ResponseDTO responseDTO = ResponseDTO.builder()
-                    .error("Login failed")
-                    .build();
+            ResponseDTO responseDTO = new ResponseDTO(false, 400, "Login failed", null);
             return ResponseEntity.badRequest().body(responseDTO);
         }
     }
