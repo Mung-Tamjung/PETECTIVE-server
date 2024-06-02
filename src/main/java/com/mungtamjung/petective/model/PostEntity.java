@@ -27,10 +27,10 @@ public class PostEntity {
     private String userId;
 
     @Column(nullable=false)
-    private Integer post_category;
+    private String post_category;
 
     @Column(nullable=false)
-    private Integer pet_category;
+    private String pet_category;
 
     @Column(nullable=false)
     private String title;
