@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @Slf4j
@@ -30,6 +31,31 @@ public class PostController {
             return ResponseEntity.badRequest().body(responseDTO);
         }
     }
+
+    @GetMapping("/lost")
+    public ResponseEntity<?> getLostPostList(){
+        try{
+            List<PostEntity> lostPostList = postService.retrieveLostPostList(writer);
+            ResponseDTO responseDTO = new ResponseDTO(true, 200,null, lostPostList);
+            return ResponseEntity.ok().body(responseDTO);
+        }catch(Exception e){
+            ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<?> getFinePostList(){
+        try{
+            List<PostEntity> findPostList = postService.retrieveFindPostList();
+            ResponseDTO responseDTO = new ResponseDTO(true, 200,null, findPostList);
+            return ResponseEntity.ok().body(responseDTO);
+        }catch(Exception e){
+            ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
+
 
 
 }
