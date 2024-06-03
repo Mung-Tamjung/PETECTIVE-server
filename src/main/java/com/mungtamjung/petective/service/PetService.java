@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -41,5 +42,9 @@ public class PetService {
         }
 
         return petRepository.findByOwner(owner);
+    }
+
+    public Optional<?> retrievePet(final String petId){
+        return petRepository.findById(petId);
     }
 }

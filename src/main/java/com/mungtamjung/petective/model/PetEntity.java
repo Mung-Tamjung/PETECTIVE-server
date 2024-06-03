@@ -1,6 +1,7 @@
 package com.mungtamjung.petective.model;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -21,9 +22,16 @@ public class PetEntity {
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
 
+    @Column(nullable=false)
     private String petname;
+
+    @Column(nullable=false)
     private String owner; //user-id(FK)
+
+    @Column(nullable=false)
     private int category; //강아지0,고양이1,기타2
+
+
     private String info; //성별,나이,무게,색 등
     private String detail; //성격,특징점
     //사진추가
