@@ -24,13 +24,11 @@ public class PostEntity {
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id; //자동 지정 id
 
-    private String userId;
+    @Column(nullable=false)
+    private int post_category;
 
     @Column(nullable=false)
-    private String post_category;
-
-    @Column(nullable=false)
-    private String pet_category;
+    private int pet_category;
 
     @Column(nullable=false)
     private String title;
@@ -39,7 +37,7 @@ public class PostEntity {
     private String content;
 
     @Column(nullable=false)
-    private String writer;
+    private String writer; //userid
 
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDate lost_date;
