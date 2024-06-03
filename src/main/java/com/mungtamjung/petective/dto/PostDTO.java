@@ -14,22 +14,13 @@ import java.time.LocalDate;
 public class PostDTO {
     private String id;
     private String writer;
-    private Integer post_category;
-    private Integer pet_category;
+    private int post_category;
+    private int pet_category;
     private String title;
     private String content;
     private LocalDate lost_date;
     //private String lost_location;
 
-    public PostDTO(final PostEntity entity){
-        this.id = entity.getId();
-        this.writer = entity.getWriter();
-        this.post_category = entity.getPost_category();
-        this.pet_category = entity.getPet_category();
-        this.title = entity.getTitle();
-        this.content = entity.getContent();
-        this.lost_date = entity.getLost_date();
-    }
     public static PostEntity toEntity(final PostDTO dto){
         return PostEntity.builder()
                 .id(dto.getId())

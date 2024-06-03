@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -54,5 +55,20 @@ public class PetController {
             return ResponseEntity.badRequest().body(responseDTO);
         }
 
+    }
+
+    @GetMapping("/{petId}")
+    public ResponseEntity<?> getPetDetail(@PathVariable("petId") String petId){
+        try{
+            Optional<?> pet = petService.retrievePet(petId);
+            if(pet==null){
+                throw new RuntimeException("Pet doesn't exist");
+            }
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, pet);
+            return ResponseEntity.ok().body(responseDTO);
+        }catch(Exception e){
+            ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
     }
 }
