@@ -3,7 +3,7 @@ spring:
     name: petective
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/petective?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://database-petective.cnyceqa06ndp.ap-northeast-2.rds.amazonaws.com:3306/petective?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Seoul
     username: mungtamjung
     password: mungtamjung2024
   jpa:
@@ -15,7 +15,7 @@ spring:
         format_sql: true
         use_sql_comments: true
     hibernate:
-      ddl-auto: create #테이블 자동 생성
+      ddl-auto: create #create: 매번 테이블 새로 생성 / update: 테이블 상태 유지
     open-in-view: false
     show_sql: true
 
