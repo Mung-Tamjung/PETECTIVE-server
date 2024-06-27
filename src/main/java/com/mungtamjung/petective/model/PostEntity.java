@@ -27,10 +27,10 @@ public class PostEntity {
     private String userId;
 
     @Column(nullable=false)
-    private String post_category;
+    private Integer postCategory;
 
     @Column(nullable=false)
-    private String pet_category;
+    private Integer petCategory;
 
     @Column(nullable=false)
     private String title;
@@ -42,8 +42,8 @@ public class PostEntity {
     private String writer;
 
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate lost_date;
+    private LocalDate lostDate;
 
-    //lost_location
+    //lostLocation
     //photo
 }

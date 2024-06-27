@@ -35,7 +35,7 @@ public class PostController {
     @GetMapping("/lost")
     public ResponseEntity<?> getLostPostList(){
         try{
-            List<PostEntity> lostPostList = postService.retrieveLostPostList(writer);
+            List<PostEntity> lostPostList = postService.retrievePost(0); // 카테고리 0 : 실종 글
             ResponseDTO responseDTO = new ResponseDTO(true, 200,null, lostPostList);
             return ResponseEntity.ok().body(responseDTO);
         }catch(Exception e){
@@ -45,9 +45,9 @@ public class PostController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<?> getFinePostList(){
+    public ResponseEntity<?> getFindPostList(){
         try{
-            List<PostEntity> findPostList = postService.retrieveFindPostList();
+            List<PostEntity> findPostList = postService.retrievePost(1); // 카테고리 1 : 발견 글
             ResponseDTO responseDTO = new ResponseDTO(true, 200,null, findPostList);
             return ResponseEntity.ok().body(responseDTO);
         }catch(Exception e){
@@ -55,7 +55,6 @@ public class PostController {
             return ResponseEntity.badRequest().body(responseDTO);
         }
     }
-
 
 
 }

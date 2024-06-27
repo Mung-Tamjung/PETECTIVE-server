@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class PostService {
@@ -18,5 +20,13 @@ public class PostService {
             throw new RuntimeException("Invalid arguements");
         }
         return postRepository.save(postEntity);
+    }
+
+    public List<PostEntity> retrievePost(final int postCategory){
+        if(!postRepository.existsByPostCategory(postCategory)){
+            log.warn("PostCategory doesn't exists {}", postCategory);
+            throw new RuntimeException("PostCategory doesn't exists");
+        }
+        return postRepository.findByPostCategory(postCategory);
     }
 }

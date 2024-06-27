@@ -9,7 +9,6 @@ import java.util.List;
 @Repository
 
 public interface PostRepository extends JpaRepository<PostEntity, String> {
-    PostEntity findByTitle(String title);
-    List<PostEntity> findByPostCategory(int post_category);
-
+    List<PostEntity> findByPostCategory(int postCategory);
+    Boolean existsByPostCategory(int postCategory);
 }
