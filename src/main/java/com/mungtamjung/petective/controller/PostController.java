@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -32,11 +33,10 @@ public class PostController {
         }
     }
 
-<<<<<<< HEAD
     @GetMapping("/lost")
     public ResponseEntity<?> getLostPostList(){
         try{
-            List<PostEntity> lostPostList = postService.retrievePost(0); // 카테고리 0 : 실종 글
+            List<PostEntity> lostPostList = postService.retrievePostList(0); // 카테고리 0 : 실종 글
             ResponseDTO responseDTO = new ResponseDTO(true, 200,null, lostPostList);
             return ResponseEntity.ok().body(responseDTO);
         }catch(Exception e){
@@ -48,8 +48,38 @@ public class PostController {
     @GetMapping("/find")
     public ResponseEntity<?> getFindPostList(){
         try{
-            List<PostEntity> findPostList = postService.retrievePost(1); // 카테고리 1 : 발견 글
+            List<PostEntity> findPostList = postService.retrievePostList(1); // 카테고리 1 : 발견 글
             ResponseDTO responseDTO = new ResponseDTO(true, 200,null, findPostList);
+            return ResponseEntity.ok().body(responseDTO);
+        }catch(Exception e){
+            ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
+
+    @GetMapping("lost/{postId}")
+    public ResponseEntity<?> getLostPostDetail(@PathVariable("postId") String postId){
+        try{
+            Optional<?> post = postService.retrievePost(postId);
+            if(post==null){
+                throw new RuntimeException("Post doesn't exist");
+            }
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, post);
+            return ResponseEntity.ok().body(responseDTO);
+        }catch(Exception e){
+            ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
+
+    @GetMapping("find/{postId}")
+    public ResponseEntity<?> getFindPostDetail(@PathVariable("postId") String postId){
+        try{
+            Optional<?> post = postService.retrievePost(postId);
+            if(post==null){
+                throw new RuntimeException("Post doesn't exist");
+            }
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, post);
             return ResponseEntity.ok().body(responseDTO);
         }catch(Exception e){
             ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);

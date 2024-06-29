@@ -25,10 +25,10 @@ public class PostEntity {
     private String id; //자동 지정 id
 
     @Column(nullable=false)
-    private Integer postCategory;
+    private Integer postCategory; // 실종글:0, 찾기글:1
 
     @Column(nullable=false)
-    private Integer petCategory;
+    private Integer petCategory; // 강아지:0, 고양이:1, 기타:2
 
     @Column(nullable=false)
     private String title;
@@ -37,7 +37,7 @@ public class PostEntity {
     private String content;
 
     @Column(nullable=false)
-    private String writer; //userid
+    private String writer; //userId
 
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDate lostDate;

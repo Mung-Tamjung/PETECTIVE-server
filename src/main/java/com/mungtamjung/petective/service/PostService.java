@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,11 +23,15 @@ public class PostService {
         return postRepository.save(postEntity);
     }
 
-    public List<PostEntity> retrievePost(final int postCategory){
+    public List<PostEntity> retrievePostList(final int postCategory){
         if(!postRepository.existsByPostCategory(postCategory)){
             log.warn("PostCategory doesn't exists {}", postCategory);
             throw new RuntimeException("PostCategory doesn't exists");
         }
         return postRepository.findByPostCategory(postCategory);
+    }
+
+    public Optional<?> retrievePost(final String postId){
+        return postRepository.findById(postId);
     }
 }
