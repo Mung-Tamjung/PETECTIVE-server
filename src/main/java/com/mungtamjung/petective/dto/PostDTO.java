@@ -30,6 +30,7 @@ public class PostDTO {
         this.content = entity.getContent();
         this.lostDate = entity.getLostDate();
     }
+
     public static PostEntity toEntity(final PostDTO dto){
         return PostEntity.builder()
                 .id(dto.getId())

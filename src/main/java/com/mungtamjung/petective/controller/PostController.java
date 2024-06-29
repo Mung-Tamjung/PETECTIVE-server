@@ -32,6 +32,7 @@ public class PostController {
         }
     }
 
+<<<<<<< HEAD
     @GetMapping("/lost")
     public ResponseEntity<?> getLostPostList(){
         try{

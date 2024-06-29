@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-
 public interface PostRepository extends JpaRepository<PostEntity, String> {
     List<PostEntity> findByPostCategory(int postCategory);
     Boolean existsByPostCategory(int postCategory);
+
 }

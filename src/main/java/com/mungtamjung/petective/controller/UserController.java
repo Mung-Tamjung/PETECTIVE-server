@@ -30,7 +30,7 @@ public class UserController {
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO){
         try{
             if(userDTO == null || userDTO.getPassword()==null){
                 throw new RuntimeException("Invalid Password value");
