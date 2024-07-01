@@ -10,5 +10,6 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<PostEntity, String> {
     List<PostEntity> findByPostCategory(int postCategory);
     Boolean existsByPostCategory(int postCategory);
+    List<PostEntity> findByWriter(String writer);
 
 }

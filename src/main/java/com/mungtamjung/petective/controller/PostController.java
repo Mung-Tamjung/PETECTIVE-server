@@ -7,6 +7,8 @@ import com.mungtamjung.petective.service.PostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +25,21 @@ public class PostController {
     @PostMapping("/post")
     public ResponseEntity<?> createPost(@RequestBody PostDTO postDTO){
         try{
-            PostEntity post = PostDTO.toEntity(postDTO);
-            PostEntity registerPost = postService.create(post);
-            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, registerPost);
+            // 현재 인증된 사용자 정보 가져오기
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String writer = authentication.getName(); // 사용자 이름 (username)을 가져옴
+
+            PostEntity postEntity = PostEntity.builder()
+                    .postCategory(postDTO.getPostCategory())
+                    .petCategory(postDTO.getPetCategory())
+                    .title(postDTO.getTitle())
+                    .content(postDTO.getContent())
+                    .writer(writer) // writer에 로그인된 사용자 정보 설정
+                    .lostDate(postDTO.getLostDate())
+                    .build();
+
+            PostEntity createdPost = postService.create(postEntity);
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, createdPost);
             return ResponseEntity.ok().body(responseDTO);
         }catch (Exception e){
             ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);

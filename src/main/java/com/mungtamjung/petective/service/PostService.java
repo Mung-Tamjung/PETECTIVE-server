@@ -34,4 +34,8 @@ public class PostService {
     public Optional<?> retrievePost(final String postId){
         return postRepository.findById(postId);
     }
+
+    public List<PostEntity> getPostsByWriter(String writer) {
+        return postRepository.findByWriter(writer);
+    }
 }
