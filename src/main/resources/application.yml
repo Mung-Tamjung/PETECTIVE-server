@@ -19,6 +19,19 @@ spring:
     open-in-view: false
     show_sql: true
 
+  cloud:
+    aws:
+      s3:
+        bucket: petective-image
+      region:
+        static: ap-northeast-2
+      stack:
+        auto: false
+      credentials:
+        access-key: AKIAU6GDWPGGPPRP2XOP
+        secret-key: 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
+
+
 
 
 
