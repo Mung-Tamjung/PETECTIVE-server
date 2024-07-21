@@ -28,7 +28,7 @@ public class TokenProvider {
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
-                .setSubject(userEntity.getId())
+                .setSubject(String.valueOf(userEntity.getId()))
                 .claim("id", userEntity.getId())
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();

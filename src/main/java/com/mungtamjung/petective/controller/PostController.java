@@ -2,7 +2,9 @@ package com.mungtamjung.petective.controller;
 
 import com.mungtamjung.petective.dto.PostDTO;
 import com.mungtamjung.petective.dto.ResponseDTO;
+import com.mungtamjung.petective.model.InterestEntity;
 import com.mungtamjung.petective.model.PostEntity;
+import com.mungtamjung.petective.service.InterestService;
 import com.mungtamjung.petective.service.PostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ import java.util.Optional;
 public class PostController {
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private InterestService interestService;
 
     @PostMapping("/post")
     public ResponseEntity<?> createPost(@RequestBody PostDTO postDTO){
@@ -101,5 +106,27 @@ public class PostController {
         }
     }
 
+    // 관심글 등록
+    @PostMapping("/lost/{postId}/interest")
+    public ResponseEntity<?> addInterestLost(@PathVariable String postId, Authentication authentication) {
+        return addInterest(postId, authentication);
+    }
+
+    @PostMapping("/find/{postId}/interest")
+    public ResponseEntity<?> addFavoriteFind(@PathVariable String postId, Authentication authentication) {
+        return addInterest(postId, authentication);
+    }
+
+    public ResponseEntity<?> addInterest(@PathVariable String postId, Authentication authentication) {
+        try {
+            String userId = authentication.getName();
+            InterestEntity interest = interestService.addInterest(userId, postId);
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, interest);
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+            ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
 
 }

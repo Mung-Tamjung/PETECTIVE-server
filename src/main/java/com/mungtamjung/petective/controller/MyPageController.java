@@ -1,11 +1,14 @@
 package com.mungtamjung.petective.controller;
 
 import com.mungtamjung.petective.dto.ResponseDTO;
+import com.mungtamjung.petective.model.InterestEntity;
 import com.mungtamjung.petective.model.PostEntity;
+import com.mungtamjung.petective.service.InterestService;
 import com.mungtamjung.petective.service.PostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +22,9 @@ public class MyPageController {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private InterestService interestService;
+
     @GetMapping("/mypost")
     public ResponseEntity<?> getUserPostList(@RequestParam String writer) {
         try {
@@ -30,4 +36,19 @@ public class MyPageController {
             return ResponseEntity.badRequest().body(responseDTO);
         }
     }
+
+    // 관심글 조회
+    @GetMapping("/interest")
+    public ResponseEntity<?> getInterest(Authentication authentication) {
+        try {
+            String userId = authentication.getName();
+            List<InterestEntity> interests = interestService.getInterestsByUser(userId);
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, interests);
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+            ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
+
 }
