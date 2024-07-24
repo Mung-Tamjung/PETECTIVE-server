@@ -1,10 +1,7 @@
 package com.mungtamjung.petective.model;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +23,9 @@ public class PetEntity {
     private String petname;
 
     @Column(nullable=false)
+    //@ManyToOne //Many=Pet, One=User
+    //@JoinColumn(name="userId")
+    //private UserEntity user;
     private String owner; //user-id(FK)
 
     @Column(nullable=false)
