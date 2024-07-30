@@ -44,4 +44,5 @@ public class PostEntity {
 
     //lostLocation
     //photo
+    private String image;
 }

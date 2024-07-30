@@ -6,12 +6,14 @@ import com.mungtamjung.petective.model.InterestEntity;
 import com.mungtamjung.petective.model.PostEntity;
 import com.mungtamjung.petective.service.InterestService;
 import com.mungtamjung.petective.service.PostService;
+import com.mungtamjung.petective.service.S3UploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,12 +29,17 @@ public class PostController {
     @Autowired
     private InterestService interestService;
 
-    @PostMapping("/post")
-    public ResponseEntity<?> createPost(@RequestBody PostDTO postDTO){
+    @Autowired
+    private S3UploadService s3UploadService;
+
+    @PostMapping(value = "/post", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> createPost(@RequestPart(value="data") PostDTO postDTO, @RequestPart(name="file")MultipartFile multipartFile){
         try{
             // 현재 인증된 사용자 정보 가져오기
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String writer = authentication.getName(); // 사용자 이름 (username)을 가져옴
+
+            String url = s3UploadService.saveFile(multipartFile);
 
             PostEntity postEntity = PostEntity.builder()
                     .postCategory(postDTO.getPostCategory())
@@ -41,6 +48,7 @@ public class PostController {
                     .content(postDTO.getContent())
                     .writer(writer) // writer에 로그인된 사용자 정보 설정
                     .lostDate(postDTO.getLostDate())
+                    .image(url)
                     .build();
 
             PostEntity createdPost = postService.create(postEntity);
