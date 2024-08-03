@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,17 +22,38 @@ public class S3UploadService {
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String saveFile(MultipartFile multipartFile) throws IOException{
-        String originalFilename = multipartFile.getOriginalFilename();
+//    public String saveFile(MultipartFile multipartFile) throws IOException{
+//        String originalFilename = multipartFile.getOriginalFilename();
+//
+//        ObjectMetadata metadata = new ObjectMetadata();
+//        metadata.setContentLength(multipartFile.getSize());
+//        metadata.setContentType(multipartFile.getContentType());
+//
+//        amazonS3.putObject(
+//                new PutObjectRequest(bucket, originalFilename, multipartFile.getInputStream(), metadata)
+//                        .withCannedAcl(CannedAccessControlList.PublicRead)
+//        );
+//        return amazonS3.getUrl(bucket, originalFilename).toString();
+//    }
 
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(multipartFile.getSize());
-        metadata.setContentType(multipartFile.getContentType());
 
-        amazonS3.putObject(
-                new PutObjectRequest(bucket, originalFilename, multipartFile.getInputStream(), metadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead)
-        );
-        return amazonS3.getUrl(bucket, originalFilename).toString();
+    public List<String> saveFile(List<MultipartFile> multipartFiles) throws IOException{
+        List<String> urls = new ArrayList<>();
+        for(MultipartFile multipartFile : multipartFiles) {
+            String originalFilename = multipartFile.getOriginalFilename();
+
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(multipartFile.getSize());
+            metadata.setContentType(multipartFile.getContentType());
+
+            amazonS3.putObject(
+                    new PutObjectRequest(bucket, originalFilename, multipartFile.getInputStream(), metadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead)
+            );
+
+            urls.add(amazonS3.getUrl(bucket, originalFilename).toString());
+        }
+
+        return urls;
     }
 }

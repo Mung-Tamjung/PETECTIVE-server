@@ -33,13 +33,13 @@ public class PostController {
     private S3UploadService s3UploadService;
 
     @PostMapping(value = "/post", consumes = {"multipart/form-data"})
-    public ResponseEntity<?> createPost(@RequestPart(value="data") PostDTO postDTO, @RequestPart(name="file")MultipartFile multipartFile){
+    public ResponseEntity<?> createPost(@RequestPart(value="data") PostDTO postDTO, @RequestPart(name="file")List<MultipartFile> multipartFiles){
         try{
             // 현재 인증된 사용자 정보 가져오기
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String writer = authentication.getName(); // 사용자 이름 (username)을 가져옴
 
-            String url = s3UploadService.saveFile(multipartFile);
+            List<String> urls = s3UploadService.saveFile(multipartFiles);
 
             PostEntity postEntity = PostEntity.builder()
                     .postCategory(postDTO.getPostCategory())
@@ -48,7 +48,7 @@ public class PostController {
                     .content(postDTO.getContent())
                     .writer(writer) // writer에 로그인된 사용자 정보 설정
                     .lostDate(postDTO.getLostDate())
-                    .image(url)
+                    .image(urls)
                     .build();
 
             PostEntity createdPost = postService.create(postEntity);
