@@ -35,6 +35,14 @@ public class PetService {
         return petRepository.save(petEntity);
     }
 
+    public PetEntity update(final PetEntity petEntity){
+        String petid = petEntity.getId();
+        if(petRepository.findById(petid) == null){
+            throw new RuntimeException("The pet doesn't exist");
+        }
+        return petRepository.save(petEntity);
+    }
+
     public List<PetEntity> retrieveMyPets(final String owner){
         if(!userRepository.existsById(owner)){
             log.warn("User doesn't exist {}", owner);
