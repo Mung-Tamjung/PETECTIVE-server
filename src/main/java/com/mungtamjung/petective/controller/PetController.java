@@ -22,6 +22,8 @@ public class PetController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerPet(@RequestBody PetDTO petDTO){
+        //유저 토큰 인증 로직 추가
+
         try{
             PetEntity pet = PetEntity.builder()
                     .petname(petDTO.getPetname())

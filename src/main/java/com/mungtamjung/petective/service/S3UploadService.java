@@ -22,21 +22,6 @@ public class S3UploadService {
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucket;
 
-//    public String saveFile(MultipartFile multipartFile) throws IOException{
-//        String originalFilename = multipartFile.getOriginalFilename();
-//
-//        ObjectMetadata metadata = new ObjectMetadata();
-//        metadata.setContentLength(multipartFile.getSize());
-//        metadata.setContentType(multipartFile.getContentType());
-//
-//        amazonS3.putObject(
-//                new PutObjectRequest(bucket, originalFilename, multipartFile.getInputStream(), metadata)
-//                        .withCannedAcl(CannedAccessControlList.PublicRead)
-//        );
-//        return amazonS3.getUrl(bucket, originalFilename).toString();
-//    }
-
-
     public List<String> saveFile(List<MultipartFile> multipartFiles) throws IOException{
         List<String> urls = new ArrayList<>();
         for(MultipartFile multipartFile : multipartFiles) {
@@ -52,6 +37,34 @@ public class S3UploadService {
             );
 
             urls.add(amazonS3.getUrl(bucket, originalFilename).toString());
+        }
+        return urls;
+    }
+
+    public List<String> saveFile(List<MultipartFile> multipartFiles, char type, String id) throws IOException{
+        List<String> urls = new ArrayList<>();
+
+        //이미지 파일 이름 변환
+        //post -> O{postid}_이미지번호순차적배정
+        //pet -> E{petid}_이비지번호순차적배정
+        String originalFilename=type+id+"_";
+        int i=0;
+
+        for(MultipartFile multipartFile : multipartFiles) {
+
+            String filename = originalFilename + Integer.toString(i) +".png";
+            i++;
+
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(multipartFile.getSize());
+            metadata.setContentType(multipartFile.getContentType());
+
+            amazonS3.putObject(
+                    new PutObjectRequest(bucket, filename, multipartFile.getInputStream(), metadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead)
+            );
+
+            urls.add(amazonS3.getUrl(bucket, filename).toString());
         }
 
         return urls;

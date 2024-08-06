@@ -38,9 +38,7 @@ public class PostController {
             // 현재 인증된 사용자 정보 가져오기
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String writer = authentication.getName(); // 사용자 이름 (username)을 가져옴
-
-            List<String> urls = s3UploadService.saveFile(multipartFiles);
-
+            
             PostEntity postEntity = PostEntity.builder()
                     .postCategory(postDTO.getPostCategory())
                     .petCategory(postDTO.getPetCategory())
@@ -48,10 +46,18 @@ public class PostController {
                     .content(postDTO.getContent())
                     .writer(writer) // writer에 로그인된 사용자 정보 설정
                     .lostDate(postDTO.getLostDate())
-                    .image(urls)
+                    //.image(urls)
                     .build();
 
             PostEntity createdPost = postService.create(postEntity);
+
+            log.info("post id: ", createdPost.getId());
+            //이미지 제외 먼저 저장 후 postid 받아와서 이미지 제목 설정
+            List<String> urls = s3UploadService.saveFile(multipartFiles, 'O', createdPost.getId());
+            createdPost.setImage(urls);
+            //엔티티 업데이트
+            createdPost=postService.update(createdPost);
+
             ResponseDTO responseDTO = new ResponseDTO(true, 200, null, createdPost);
             return ResponseEntity.ok().body(responseDTO);
         }catch (Exception e){

@@ -23,6 +23,14 @@ public class PostService {
         return postRepository.save(postEntity);
     }
 
+    public PostEntity update(final PostEntity postEntity){
+        String postid = postEntity.getId();
+        if(postRepository.findById(postid) == null){
+            throw new RuntimeException("The post doesn't exist");
+        }
+        return postRepository.save(postEntity);
+    }
+
     public List<PostEntity> retrievePostList(final int postCategory){
         if(!postRepository.existsByPostCategory(postCategory)){
             log.warn("PostCategory doesn't exists {}", postCategory);
