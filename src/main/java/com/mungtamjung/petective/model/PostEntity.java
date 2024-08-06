@@ -12,6 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -44,4 +45,6 @@ public class PostEntity {
 
     //lostLocation
     //photo
+    //private String image;
+    private List<String> image;
 }
