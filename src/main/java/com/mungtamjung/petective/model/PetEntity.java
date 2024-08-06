@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import java.util.List;
 
 @Data
 @Entity
@@ -34,5 +35,5 @@ public class PetEntity {
 
     private String info; //성별,나이,무게,색 등
     private String detail; //성격,특징점
-    //사진추가
+    private List<String> image;
 }

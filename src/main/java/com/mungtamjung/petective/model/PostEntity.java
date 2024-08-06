@@ -44,7 +44,5 @@ public class PostEntity {
     private LocalDate lostDate;
 
     //lostLocation
-    //photo
-    //private String image;
     private List<String> image;
 }
