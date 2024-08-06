@@ -7,6 +7,8 @@ import com.mungtamjung.petective.service.PetService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +24,14 @@ public class PetController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerPet(@RequestBody PetDTO petDTO){
-        //유저 토큰 인증 로직 추가
+        // 현재 인증된 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String owner = authentication.getName();
 
         try{
             PetEntity pet = PetEntity.builder()
                     .petname(petDTO.getPetname())
-                    .owner(petDTO.getOwner())
+                    .owner(owner) //로그인한 사용자 정보
                     .category(petDTO.getCategory())
                     .info(petDTO.getInfo())
                     .detail(petDTO.getDetail())

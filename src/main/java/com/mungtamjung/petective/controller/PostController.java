@@ -51,7 +51,6 @@ public class PostController {
 
             PostEntity createdPost = postService.create(postEntity);
 
-            log.info("post id: ", createdPost.getId());
             //이미지 제외 먼저 저장 후 postid 받아와서 이미지 제목 설정
             List<String> urls = s3UploadService.saveFile(multipartFiles, 'O', createdPost.getId());
             createdPost.setImage(urls);
