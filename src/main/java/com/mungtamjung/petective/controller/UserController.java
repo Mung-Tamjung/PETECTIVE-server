@@ -54,9 +54,16 @@ public class UserController {
 
             return ResponseEntity.ok().body(responseDTO);
         }catch(Exception e){
+            String eMessage = e.getMessage();
 
-            ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
-            return ResponseEntity.badRequest().body(responseDTO);
+            if(eMessage == "DUPLICATED_USER_NAME" || eMessage == "DUPLICATED_USER_EMAIL"){
+                ResponseDTO responseDTO = new ResponseDTO(false, 211, eMessage, null);
+                return ResponseEntity.ok().body(responseDTO);
+            }
+            else{
+                ResponseDTO responseDTO = new ResponseDTO(false, 400, eMessage, null);
+                return ResponseEntity.badRequest().body(responseDTO);
+            }
         }
     }
 
