@@ -23,10 +23,10 @@ public class UserService {
         final String password = userEntity.getPassword();
         if(userRepository.existsByEmail(email)){
             log.warn("User email already exists {}", email);
-            throw new RuntimeException("User email already exists");
+            throw new RuntimeException("DUPLICATED_USER_EMAIL");
         }else if(userRepository.existsByUsername(username)){
             log.warn("Username already exists {}", username);
-            throw new RuntimeException("Username already exists");
+            throw new RuntimeException("DUPLICATED_USER_NAME");
         }
         return userRepository.save(userEntity);
     }
