@@ -4,6 +4,8 @@ import com.mungtamjung.petective.model.PostEntity;
 import com.mungtamjung.petective.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,5 +47,15 @@ public class PostService {
 
     public List<PostEntity> getPostsByWriter(String writer) {
         return postRepository.findByWriter(writer);
+    }
+
+    public List<PostEntity> searchLostPosts(String keyword, int offset, int limit) {
+        Pageable pageable = PageRequest.of(offset, limit);
+        return postRepository.searchPostsByCategory(keyword, 0, pageable); // 0: 실종 글
+    }
+
+    public List<PostEntity> searchFindPosts(String keyword, int offset, int limit) {
+        Pageable pageable = PageRequest.of(offset, limit);
+        return postRepository.searchPostsByCategory(keyword, 1, pageable); // 1: 발견 글
     }
 }

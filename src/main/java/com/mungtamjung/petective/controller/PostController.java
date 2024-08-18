@@ -32,6 +32,7 @@ public class PostController {
     @Autowired
     private S3UploadService s3UploadService;
 
+    // 글 작성
     @PostMapping(value = "/post", consumes = {"multipart/form-data"})
     public ResponseEntity<?> createPost(@RequestPart(value="data") PostDTO postDTO, @RequestPart(name="file")List<MultipartFile> multipartFiles){
         try{
@@ -65,6 +66,7 @@ public class PostController {
         }
     }
 
+    // 실종 글 리스트 조회
     @GetMapping("/lost")
     public ResponseEntity<?> getLostPostList(){
         try{
@@ -77,6 +79,7 @@ public class PostController {
         }
     }
 
+    // 발견 글 리스트 조회
     @GetMapping("/find")
     public ResponseEntity<?> getFindPostList(){
         try{
@@ -89,7 +92,8 @@ public class PostController {
         }
     }
 
-    @GetMapping("lost/{postId}")
+    // 실종 글 상세 조회
+    @GetMapping("/lost/{postId}")
     public ResponseEntity<?> getLostPostDetail(@PathVariable("postId") String postId){
         try{
             Optional<?> post = postService.retrievePost(postId);
@@ -104,7 +108,8 @@ public class PostController {
         }
     }
 
-    @GetMapping("find/{postId}")
+    // 발견 글 상세 조회
+    @GetMapping("/find/{postId}")
     public ResponseEntity<?> getFindPostDetail(@PathVariable("postId") String postId){
         try{
             Optional<?> post = postService.retrievePost(postId);
@@ -126,7 +131,7 @@ public class PostController {
     }
 
     @PostMapping("/find/{postId}/interest")
-    public ResponseEntity<?> addFavoriteFind(@PathVariable String postId, Authentication authentication) {
+    public ResponseEntity<?> addInterestFind(@PathVariable String postId, Authentication authentication) {
         return addInterest(postId, authentication);
     }
 
@@ -142,4 +147,34 @@ public class PostController {
         }
     }
 
+    // 글 검색
+    @GetMapping("/lost/search")
+    public ResponseEntity<?> searchLostPosts(
+            @RequestParam("keyword") String keyword,
+            @RequestParam("offset") int offset,
+            @RequestParam("limit") int limit) {
+        try {
+            List<PostEntity> searchResults = postService.searchLostPosts(keyword, offset, limit);
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, searchResults);
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+            ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
+
+    @GetMapping("/find/search")
+    public ResponseEntity<?> searchFindPosts(
+            @RequestParam("keyword") String keyword,
+            @RequestParam("offset") int offset,
+            @RequestParam("limit") int limit) {
+        try {
+            List<PostEntity> searchResults = postService.searchFindPosts(keyword, offset, limit);
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, searchResults);
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+            ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.mungtamjung.petective.model;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -13,6 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -38,7 +40,8 @@ public class ExerciseEntity {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime end; // 산책 종료 시간
 
-    private Point path; // 위치 포인트 리스트
+    @ElementCollection
+    private List<Point> path; // 위치 포인트 리스트
 
     private String memo; // 산책 기록 메모
 

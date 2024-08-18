@@ -1,5 +1,6 @@
 package com.mungtamjung.petective.controller;
 
+import com.mungtamjung.petective.dto.ExerciseDTO;
 import com.mungtamjung.petective.dto.ResponseDTO;
 import com.mungtamjung.petective.model.ExerciseEntity;
 import com.mungtamjung.petective.service.ExerciseService;
@@ -47,5 +48,24 @@ public class ExerciseController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
+    // 산책 시작
+    @PostMapping("/start")
+    public ResponseEntity<?> startExercise(@RequestBody ExerciseDTO exerciseDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userid = authentication.getName();
+        ExerciseEntity exerciseEntity = exerciseService.startExercise(userid, exerciseDTO.getStart());
+        ResponseDTO responseDTO = new ResponseDTO(true, 200, null, exerciseEntity);
+        return ResponseEntity.ok().body(responseDTO);
+    }
+
+    // 산책 종료
+    @PostMapping("/end")
+    public ResponseEntity<?> endExercise(@RequestBody ExerciseDTO exerciseDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userid = authentication.getName();
+        ExerciseEntity exerciseEntity = exerciseService.endExercise(userid, exerciseDTO);
+        ResponseDTO responseDTO = new ResponseDTO(true, 200, null, exerciseEntity);
+        return ResponseEntity.ok().body(responseDTO);
+    }
 
 }
