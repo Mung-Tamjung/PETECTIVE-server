@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.mungtamjung.petective.repository.PostImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,26 +23,23 @@ public class S3UploadService {
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucket;
 
-    public List<String> saveFile(List<MultipartFile> multipartFiles) throws IOException{
-        List<String> urls = new ArrayList<>();
-        for(MultipartFile multipartFile : multipartFiles) {
-            String originalFilename = multipartFile.getOriginalFilename();
+    public String saveFile(MultipartFile multipartFile, String filename) throws IOException{
 
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentLength(multipartFile.getSize());
-            metadata.setContentType(multipartFile.getContentType());
+        filename +=".png";
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(multipartFile.getSize());
+        metadata.setContentType(multipartFile.getContentType());
 
-            amazonS3.putObject(
-                    new PutObjectRequest(bucket, originalFilename, multipartFile.getInputStream(), metadata)
-                            .withCannedAcl(CannedAccessControlList.PublicRead)
-            );
+        amazonS3.putObject(
+                new PutObjectRequest(bucket, filename, multipartFile.getInputStream(), metadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead)
+        );
 
-            urls.add(amazonS3.getUrl(bucket, originalFilename).toString());
-        }
-        return urls;
+        String url = amazonS3.getUrl(bucket, filename).toString();
+        return url;
     }
 
-    public List<String> saveFile(List<MultipartFile> multipartFiles, char type, String id) throws IOException{
+    public List<String> saveFiles(List<MultipartFile> multipartFiles, char type, String id) throws IOException{
         List<String> urls = new ArrayList<>();
 
         //이미지 파일 이름 변환

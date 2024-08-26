@@ -18,8 +18,9 @@ public class FileUploadController {
 
     private final S3UploadService s3UploadService;
 
-    @PostMapping("/api/upload")
-    public ResponseEntity<List<String>> upload(@RequestPart(name="file") List<MultipartFile> files) throws IOException{
-        return ResponseEntity.ok(s3UploadService.saveFile(files));
-    }
+//    @PostMapping("/api/upload")
+//    public ResponseEntity<List<String>> upload(@RequestPart(name="file") MultipartFile file) throws IOException{
+//        String filename = file.getOriginalFilename();
+//        return ResponseEntity.ok(s3UploadService.saveFile(file, filename));
+//    }
 }

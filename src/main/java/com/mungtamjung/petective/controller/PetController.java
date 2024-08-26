@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,15 +41,11 @@ public class PetController {
                     .category(petDTO.getCategory())
                     .info(petDTO.getInfo())
                     .detail(petDTO.getDetail())
+                    .images(new ArrayList<>())
                     .build();
 
-            PetEntity registerPet = petService.create(pet);
+            PetEntity registerPet = petService.create(pet, multipartFiles);
 
-            //이미지 제외 먼저 저장 후 petid 받아와서 이미지 제목 설정
-            List<String> urls = s3UploadService.saveFile(multipartFiles, 'E', registerPet.getId()); //E: pet 이미지
-            registerPet.setImage(urls);
-            //엔티티 업데이트
-            registerPet=petService.update(registerPet);
 
             ResponseDTO responseDTO = new ResponseDTO(true, 200, null, registerPet);
 
