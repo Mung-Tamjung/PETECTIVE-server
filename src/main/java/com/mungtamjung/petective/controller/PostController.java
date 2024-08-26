@@ -9,6 +9,9 @@ import com.mungtamjung.petective.service.PostService;
 import com.mungtamjung.petective.service.S3UploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -66,12 +69,13 @@ public class PostController {
         }
     }
 
-    // 실종 글 리스트 조회
+    // 실종 글 리스트 조회 (스크롤 방식)
     @GetMapping("/lost")
-    public ResponseEntity<?> getLostPostList(){
+    public ResponseEntity<?> getLostPostList(@RequestParam int offset, @RequestParam int limit){
         try{
-            List<PostEntity> lostPostList = postService.retrievePostList(0); // 카테고리 0 : 실종 글
-            ResponseDTO responseDTO = new ResponseDTO(true, 200,null, lostPostList);
+            Pageable pageable = PageRequest.of(offset, limit);
+            Page<PostEntity> lostPostPage = postService.retrievePostList(0, pageable); // 카테고리 0 : 실종 글
+            ResponseDTO responseDTO = new ResponseDTO(true, 200,null, lostPostPage.getContent());
             return ResponseEntity.ok().body(responseDTO);
         }catch(Exception e){
             ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
@@ -79,12 +83,13 @@ public class PostController {
         }
     }
 
-    // 발견 글 리스트 조회
+    // 발견 글 리스트 조회 (스크롤 방식)
     @GetMapping("/find")
-    public ResponseEntity<?> getFindPostList(){
+    public ResponseEntity<?> getFindPostList(@RequestParam int offset, @RequestParam int limit){
         try{
-            List<PostEntity> findPostList = postService.retrievePostList(1); // 카테고리 1 : 발견 글
-            ResponseDTO responseDTO = new ResponseDTO(true, 200,null, findPostList);
+            Pageable pageable = PageRequest.of(offset, limit);
+            Page<PostEntity> findPostPage = postService.retrievePostList(1, pageable); // 카테고리 1 : 발견 글
+            ResponseDTO responseDTO = new ResponseDTO(true, 200,null, findPostPage.getContent());
             return ResponseEntity.ok().body(responseDTO);
         }catch(Exception e){
             ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
