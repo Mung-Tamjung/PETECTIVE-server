@@ -152,10 +152,11 @@ public class PostController {
     @GetMapping("/lost/search")
     public ResponseEntity<?> searchLostPosts(
             @RequestParam("keyword") String keyword,
+            @RequestParam("petCategory") int petCategory,
             @RequestParam("offset") int offset,
             @RequestParam("limit") int limit) {
         try {
-            List<PostEntity> searchResults = postService.searchLostPosts(keyword, offset, limit);
+            List<PostEntity> searchResults = postService.searchLostPosts(keyword, petCategory, offset, limit);
             ResponseDTO responseDTO = new ResponseDTO(true, 200, null, searchResults);
             return ResponseEntity.ok().body(responseDTO);
         } catch (Exception e) {
@@ -167,10 +168,11 @@ public class PostController {
     @GetMapping("/find/search")
     public ResponseEntity<?> searchFindPosts(
             @RequestParam("keyword") String keyword,
+            @RequestParam("petCategory") int petCategory,
             @RequestParam("offset") int offset,
             @RequestParam("limit") int limit) {
         try {
-            List<PostEntity> searchResults = postService.searchFindPosts(keyword, offset, limit);
+            List<PostEntity> searchResults = postService.searchFindPosts(keyword, petCategory, offset, limit);
             ResponseDTO responseDTO = new ResponseDTO(true, 200, null, searchResults);
             return ResponseEntity.ok().body(responseDTO);
         } catch (Exception e) {

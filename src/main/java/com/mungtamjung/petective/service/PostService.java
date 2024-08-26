@@ -80,6 +80,7 @@ public class PostService {
         return postRepository.save(postEntity);
     }
 
+    @Transactional
     public Page<PostEntity> retrievePostList(final int postCategory, Pageable pageable){
         if(!postRepository.existsByPostCategory(postCategory)){
             log.warn("PostCategory doesn't exists {}", postCategory);
@@ -97,13 +98,15 @@ public class PostService {
         return postRepository.findByWriter(writer);
     }
 
-    public List<PostEntity> searchLostPosts(String keyword, int offset, int limit) {
+    public List<PostEntity> searchLostPosts(String keyword, int petCategory, int offset, int limit) {
         Pageable pageable = PageRequest.of(offset, limit);
-        return postRepository.searchPostsByCategory(keyword, 0, pageable); // 0: 실종 글
+        Page<PostEntity> postPage = postRepository.searchPostsByCategory(keyword, 0, petCategory, pageable); // 0: 실종 글
+        return postPage.getContent();
     }
 
-    public List<PostEntity> searchFindPosts(String keyword, int offset, int limit) {
+    public List<PostEntity> searchFindPosts(String keyword, int petCategory, int offset, int limit) {
         Pageable pageable = PageRequest.of(offset, limit);
-        return postRepository.searchPostsByCategory(keyword, 1, pageable); // 1: 발견 글
+        Page<PostEntity> postPage = postRepository.searchPostsByCategory(keyword, 1, petCategory, pageable); // 1: 발견 글
+        return postPage.getContent();
     }
 }

@@ -20,8 +20,10 @@ public interface PostRepository extends JpaRepository<PostEntity, String> {
             "(LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(p.writer) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND " +
-            "p.postCategory = :category")
-    List<PostEntity> searchPostsByCategory(@Param("keyword") String keyword, @Param("category") int category, Pageable pageable);
-
-
+            "p.postCategory = :postCategory AND " +
+            "p.petCategory = :petCategory")
+    Page<PostEntity> searchPostsByCategory(@Param("keyword") String keyword,
+                                                         @Param("postCategory") int postCategory,
+                                                         @Param("petCategory") int petCategory,
+                                                         Pageable pageable);
 }
