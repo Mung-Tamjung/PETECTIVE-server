@@ -6,6 +6,9 @@ spring:
     url: jdbc:mysql://database-petective.cnyceqa06ndp.ap-northeast-2.rds.amazonaws.com:3306/petective?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Seoul
     username: mungtamjung
     password: mungtamjung2024
+  sql:
+    init:
+      mode: always
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect

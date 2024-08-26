@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,16 +48,11 @@ public class PostController {
                     .content(postDTO.getContent())
                     .writer(writer) // writer에 로그인된 사용자 정보 설정
                     .lostDate(postDTO.getLostDate())
-                    //.image(urls)
+                    .images(new ArrayList<>())
                     .build();
 
-            PostEntity createdPost = postService.create(postEntity);
+            PostEntity createdPost = postService.create(postEntity, multipartFiles);
 
-            //이미지 제외 먼저 저장 후 postid 받아와서 이미지 제목 설정
-            List<String> urls = s3UploadService.saveFile(multipartFiles, 'O', createdPost.getId()); //O: post 이미지
-            createdPost.setImage(urls);
-            //엔티티 업데이트
-            createdPost=postService.update(createdPost);
 
             ResponseDTO responseDTO = new ResponseDTO(true, 200, null, createdPost);
             return ResponseEntity.ok().body(responseDTO);

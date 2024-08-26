@@ -1,9 +1,7 @@
 package com.mungtamjung.petective.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,5 +42,15 @@ public class PostEntity {
     private LocalDate lostDate;
 
     //lostLocation
-    private List<String> image;
+
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "postEntity") //cascade 추가
+    //@JoinColumn(name = "post_id")
+    private List<PostImageEntity> images;
+
+    public void addPostImage(PostImageEntity postImageEntity){
+        this.images.add(postImageEntity);
+        postImageEntity.setPostEntity(this);
+    }
+
 }

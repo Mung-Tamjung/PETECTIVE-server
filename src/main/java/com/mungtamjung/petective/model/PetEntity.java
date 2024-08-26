@@ -1,6 +1,7 @@
 package com.mungtamjung.petective.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,9 +25,6 @@ public class PetEntity {
     private String petname;
 
     @Column(nullable=false)
-    //@ManyToOne //Many=Pet, One=User
-    //@JoinColumn(name="userId")
-    //private UserEntity user;
     private String owner; //user-id(FK)
 
     @Column(nullable=false)
@@ -35,5 +33,14 @@ public class PetEntity {
 
     private String info; //성별,나이,무게,색 등
     private String detail; //성격,특징점
-    private List<String> image;
+
+
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "petEntity")
+    private List<PetImageEntity> images;
+
+    public void addPetImage(PetImageEntity petImageEntity){
+        this.images.add(petImageEntity);
+        petImageEntity.setPetEntity(this);
+    }
 }
