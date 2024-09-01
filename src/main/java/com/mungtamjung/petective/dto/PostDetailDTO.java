@@ -13,6 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDetailDTO {
-    private PostEntity postEntity;
+    private PostEntity post;
     private List<PostEntity> related;
 }
