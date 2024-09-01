@@ -1,10 +1,13 @@
 package com.mungtamjung.petective.controller;
 
 import com.mungtamjung.petective.dto.PostDTO;
+import com.mungtamjung.petective.dto.PostDetailDTO;
 import com.mungtamjung.petective.dto.ResponseDTO;
 import com.mungtamjung.petective.model.InterestEntity;
 import com.mungtamjung.petective.model.PostEntity;
+import com.mungtamjung.petective.model.PostImageEntity;
 import com.mungtamjung.petective.service.InterestService;
+import com.mungtamjung.petective.service.PostImageService;
 import com.mungtamjung.petective.service.PostService;
 import com.mungtamjung.petective.service.S3UploadService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +18,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.sql.Struct;
+import java.util.*;
 
 
 @Slf4j
@@ -29,6 +31,9 @@ public class PostController {
 
     @Autowired
     private InterestService interestService;
+
+    @Autowired
+    private PostImageService postImageService;
 
     @Autowired
     private S3UploadService s3UploadService;
@@ -92,11 +97,27 @@ public class PostController {
     @GetMapping("/lost/{postId}")
     public ResponseEntity<?> getLostPostDetail(@PathVariable("postId") String postId){
         try{
-            Optional<?> post = postService.retrievePost(postId);
+            Optional<PostEntity> post = postService.retrievePost(postId);
             if(post==null){
                 throw new RuntimeException("Post doesn't exist");
             }
-            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, post);
+
+            List<PostEntity> related = new ArrayList<>(); //같은 종 게시글 리스트
+            PostEntity p = post.get(); //현재 게시글
+            String breed = p.getImages().get(0).getBreed(); //현재 게시글 (첫번째)이미지 종
+            List<PostImageEntity> related_images = postImageService.retrieveBreed(breed); //같은 종 이미지 검색
+            for(PostImageEntity image : related_images){
+                PostEntity r = image.getPostEntity();
+                if(r != p && !related.contains(r)) //해당 이미지의 게시글이 현재 게시글이 아니며, 게시글 리스트에 포함이 안 된 상태라면
+                    related.add(r); // 게시글 리스트의 추가
+            }
+
+            PostDetailDTO postDetailDTO = PostDetailDTO.builder()
+                    .postEntity(p)
+                    .related(related)
+                    .build();
+
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, postDetailDTO); //post);
             return ResponseEntity.ok().body(responseDTO);
         }catch(Exception e){
             ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
@@ -109,6 +130,7 @@ public class PostController {
     public ResponseEntity<?> getFindPostDetail(@PathVariable("postId") String postId){
         try{
             Optional<?> post = postService.retrievePost(postId);
+
             if(post==null){
                 throw new RuntimeException("Post doesn't exist");
             }

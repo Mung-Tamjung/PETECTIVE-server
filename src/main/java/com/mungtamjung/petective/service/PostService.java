@@ -51,7 +51,7 @@ public class PostService {
                     PostImageEntity postImageEntity = PostImageEntity.builder()
                             .url(url)
                             .category(createdPost.getPostCategory())
-                            //.breed()
+                            .breed("breed") //종 테스트
                             .build();
 
                     postImageRepository.save(postImageEntity);
@@ -86,8 +86,7 @@ public class PostService {
         }
         return postRepository.findByPostCategory(postCategory);
     }
-
-    public Optional<?> retrievePost(final String postId){
+    public Optional<PostEntity> retrievePost(final String postId){
         return postRepository.findById(postId);
     }
 
