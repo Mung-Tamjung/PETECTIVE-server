@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface PostImageRepository extends JpaRepository<PostImageEntity, String>{
-    List<PostImageEntity> findByBreed(String breed);
+    //List<PostImageEntity> findByBreed(String breed);
 }

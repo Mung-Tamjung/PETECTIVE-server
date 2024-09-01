@@ -51,7 +51,7 @@ public class PostService {
                     PostImageEntity postImageEntity = PostImageEntity.builder()
                             .url(url)
                             .category(createdPost.getPostCategory())
-                            .breed("breed") //종 테스트
+                            //.breed("breed") //종 테스트
                             .build();
 
                     postImageRepository.save(postImageEntity);
@@ -102,5 +102,9 @@ public class PostService {
     public List<PostEntity> searchFindPosts(String keyword, int offset, int limit) {
         Pageable pageable = PageRequest.of(offset, limit);
         return postRepository.searchPostsByCategory(keyword, 1, pageable); // 1: 발견 글
+    }
+
+    public List<PostEntity> retrieveRelatedPost(String breed){
+        return postRepository.findByBreed(breed);
     }
 }

@@ -15,6 +15,8 @@ public interface PostRepository extends JpaRepository<PostEntity, String> {
     Boolean existsByPostCategory(int postCategory);
     List<PostEntity> findByWriter(String writer);
 
+    List<PostEntity> findByBreed(String breed);
+
     @Query("SELECT p FROM PostEntity p WHERE " +
             "(LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +

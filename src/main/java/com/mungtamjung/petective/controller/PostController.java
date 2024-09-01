@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Struct;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -54,6 +55,7 @@ public class PostController {
                     .writer(writer) // writer에 로그인된 사용자 정보 설정
                     .lostDate(postDTO.getLostDate())
                     .images(new ArrayList<>())
+                    .breed(postDTO.getBreed())
                     .build();
 
             PostEntity createdPost = postService.create(postEntity, multipartFiles);
@@ -102,22 +104,17 @@ public class PostController {
                 throw new RuntimeException("Post doesn't exist");
             }
 
-            List<PostEntity> related = new ArrayList<>(); //같은 종 게시글 리스트
-            PostEntity p = post.get(); //현재 게시글
-            String breed = p.getImages().get(0).getBreed(); //현재 게시글 (첫번째)이미지 종
-            List<PostImageEntity> related_images = postImageService.retrieveBreed(breed); //같은 종 이미지 검색
-            for(PostImageEntity image : related_images){
-                PostEntity r = image.getPostEntity();
-                if(r != p && !related.contains(r)) //해당 이미지의 게시글이 현재 게시글이 아니며, 게시글 리스트에 포함이 안 된 상태라면
-                    related.add(r); // 게시글 리스트의 추가
-            }
+            List<PostEntity> related = postService.retrieveRelatedPost(post.get().getBreed());
+            related = related.stream()
+                    .filter(r -> !r.getId().equals(post.get().getId()))
+                    .collect(Collectors.toList());
 
             PostDetailDTO postDetailDTO = PostDetailDTO.builder()
-                    .postEntity(p)
+                    .postEntity(post.get())
                     .related(related)
                     .build();
 
-            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, postDetailDTO); //post);
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, postDetailDTO);
             return ResponseEntity.ok().body(responseDTO);
         }catch(Exception e){
             ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
