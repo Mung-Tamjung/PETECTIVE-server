@@ -21,6 +21,8 @@ public class PostDTO {
     private LocalDate lostDate;
     //private String lostLocation;
 
+    private String breed;
+
     public PostDTO(final PostEntity entity){
         this.id = entity.getId();
         this.writer = entity.getWriter();

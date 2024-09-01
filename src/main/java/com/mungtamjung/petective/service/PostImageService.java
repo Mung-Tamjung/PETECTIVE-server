@@ -19,9 +19,9 @@ public class PostImageService {
     @Autowired
     private PostImageRepository postImageRepository;
 
-    public List<PostImageEntity> retrieveBreed(String breed){
-        List<PostImageEntity> related = postImageRepository.findByBreed(breed);
-
-        return related;
-    }
+//    public List<PostImageEntity> retrieveBreed(String breed){
+//        List<PostImageEntity> related = postImageRepository.findByBreed(breed);
+//
+//        return related;
+//    }
 }
