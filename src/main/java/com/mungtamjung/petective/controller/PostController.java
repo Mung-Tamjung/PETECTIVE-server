@@ -115,7 +115,7 @@ public class PostController {
                     .collect(Collectors.toList());
 
             PostDetailDTO postDetailDTO = PostDetailDTO.builder()
-                    .postEntity(post.get())
+                    .post(post.get())
                     .related(related)
                     .build();
 
