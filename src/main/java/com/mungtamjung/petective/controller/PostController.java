@@ -46,16 +46,16 @@ public class PostController {
     @PostMapping(value = "/post", consumes = {"multipart/form-data"})
     public ResponseEntity<?> createPost(@RequestPart(value="data") PostDTO postDTO, @RequestPart(name="file")List<MultipartFile> multipartFiles){
         try{
-            // 현재 인증된 사용자 정보 가져오기
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String writer = authentication.getName(); // 사용자 이름 (username)을 가져옴
+//            // 현재 인증된 사용자 정보 가져오기
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            String writer = authentication.getName(); // 사용자 이름 (username)을 가져옴
             
             PostEntity postEntity = PostEntity.builder()
                     .postCategory(postDTO.getPostCategory())
                     .petCategory(postDTO.getPetCategory())
                     .title(postDTO.getTitle())
                     .content(postDTO.getContent())
-                    .writer(writer) // writer에 로그인된 사용자 정보 설정
+                    .writer(postDTO.getWriter()) // writer에 로그인된 사용자 정보 설정
                     .lostDate(postDTO.getLostDate())
                     .images(new ArrayList<>())
                     .breed(postDTO.getBreed())
