@@ -30,14 +30,14 @@ public class PetController {
 
     @PostMapping(value="/register", consumes = {"multipart/form-data"})
     public ResponseEntity<?> registerPet(@RequestPart(value="data") PetDTO petDTO, @RequestPart(name="file") List<MultipartFile> multipartFiles){
-//        // 현재 인증된 사용자 정보 가져오기
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String owner = authentication.getName();
+        // 현재 인증된 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String owner = authentication.getName();
 
         try{
             PetEntity pet = PetEntity.builder()
                     .petname(petDTO.getPetname())
-                    .owner(petDTO.getOwner()) //로그인한 사용자 정보
+                    .owner(owner) //로그인한 사용자 정보
                     .category(petDTO.getCategory())
                     .info(petDTO.getInfo())
                     .detail(petDTO.getDetail())
