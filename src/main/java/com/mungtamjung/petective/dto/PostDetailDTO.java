@@ -1,19 +1,18 @@
 package com.mungtamjung.petective.dto;
 
+import com.mungtamjung.petective.model.PostEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatDTO {
-    private String sender; //user id
-    private String receiver; //user id
-    private String message;
-
-    private String chatRoom; //chatroom id
-    //private String sentTime;
+public class PostDetailDTO {
+    private PostEntity post;
+    private List<PostEntity> related;
 }

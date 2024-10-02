@@ -41,6 +41,8 @@ public class PostEntity {
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDate lostDate;
 
+    private String breed;
+
     //lostLocation
 
     @JsonManagedReference

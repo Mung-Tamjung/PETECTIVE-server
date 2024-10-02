@@ -1,23 +1,23 @@
 package com.mungtamjung.petective.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import org.springframework.web.socket.server.HandshakeInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketConfig.class);
 
-    @Autowired
     private final HandshakeInterceptor handshakeInterceptor;
 
-    @Autowired
     private final WebSocketHandler webSocketHandler;
 
     @Override
@@ -28,7 +28,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
                     .setAllowedOrigins("*");
                     //.withSockJS();
         } catch(Exception e){
-            System.out.println("Error registering Stop Endpoints: "+ e.getMessage());
+            logger.error("Error registering WebSocket handlers: {}", e.getMessage(), e);
         }
 
     }

@@ -1,10 +1,13 @@
 package com.mungtamjung.petective.controller;
 
 import com.mungtamjung.petective.dto.PostDTO;
+import com.mungtamjung.petective.dto.PostDetailDTO;
 import com.mungtamjung.petective.dto.ResponseDTO;
 import com.mungtamjung.petective.model.InterestEntity;
 import com.mungtamjung.petective.model.PostEntity;
+import com.mungtamjung.petective.model.PostImageEntity;
 import com.mungtamjung.petective.service.InterestService;
+import com.mungtamjung.petective.service.PostImageService;
 import com.mungtamjung.petective.service.PostService;
 import com.mungtamjung.petective.service.S3UploadService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +21,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.sql.Struct;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -34,24 +37,28 @@ public class PostController {
     private InterestService interestService;
 
     @Autowired
+    private PostImageService postImageService;
+
+    @Autowired
     private S3UploadService s3UploadService;
 
     // 글 작성
     @PostMapping(value = "/post", consumes = {"multipart/form-data"})
     public ResponseEntity<?> createPost(@RequestPart(value="data") PostDTO postDTO, @RequestPart(name="file")List<MultipartFile> multipartFiles){
         try{
-            // 현재 인증된 사용자 정보 가져오기
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String writer = authentication.getName(); // 사용자 이름 (username)을 가져옴
+//            // 현재 인증된 사용자 정보 가져오기
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            String writer = authentication.getName(); // 사용자 이름 (username)을 가져옴
             
             PostEntity postEntity = PostEntity.builder()
                     .postCategory(postDTO.getPostCategory())
                     .petCategory(postDTO.getPetCategory())
                     .title(postDTO.getTitle())
                     .content(postDTO.getContent())
-                    .writer(writer) // writer에 로그인된 사용자 정보 설정
+                    .writer(postDTO.getWriter()) // writer에 로그인된 사용자 정보 설정
                     .lostDate(postDTO.getLostDate())
                     .images(new ArrayList<>())
+                    .breed(postDTO.getBreed())
                     .build();
 
             PostEntity createdPost = postService.create(postEntity, multipartFiles);
@@ -97,11 +104,22 @@ public class PostController {
     @GetMapping("/lost/{postId}")
     public ResponseEntity<?> getLostPostDetail(@PathVariable("postId") String postId){
         try{
-            Optional<?> post = postService.retrievePost(postId);
+            Optional<PostEntity> post = postService.retrievePost(postId);
             if(post==null){
                 throw new RuntimeException("Post doesn't exist");
             }
-            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, post);
+
+            List<PostEntity> related = postService.retrieveRelatedPost(post.get().getBreed());
+            related = related.stream()
+                    .filter(r -> !r.getId().equals(post.get().getId()))
+                    .collect(Collectors.toList());
+
+            PostDetailDTO postDetailDTO = PostDetailDTO.builder()
+                    .post(post.get())
+                    .related(related)
+                    .build();
+
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, postDetailDTO);
             return ResponseEntity.ok().body(responseDTO);
         }catch(Exception e){
             ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
@@ -114,6 +132,7 @@ public class PostController {
     public ResponseEntity<?> getFindPostDetail(@PathVariable("postId") String postId){
         try{
             Optional<?> post = postService.retrievePost(postId);
+
             if(post==null){
                 throw new RuntimeException("Post doesn't exist");
             }
