@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-//@Builder
 @Entity
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -28,11 +28,10 @@ public class ChatEntity{
     private String message;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private String created_at;
+    private LocalDateTime createdAt;
 
-//    @ManyToOne
-//    @JoinColumn()
-//    private ChatRoomEntity chatRoom;
-    private String roomId; //채팅룸ID(FK)
+    @ManyToOne(fetch = FetchType.LAZY) // 지연 로딩
+    @JoinColumn(name = "roomId") // FK
+    private ChatRoomEntity chatRoom;
 
 }
