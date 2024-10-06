@@ -1,5 +1,6 @@
 package com.mungtamjung.petective.security;
 
+import com.mungtamjung.petective.service.TokenBlacklistService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,13 +26,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private TokenProvider tokenProvider;
 
+    @Autowired
+    private TokenBlacklistService tokenBlacklistService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException{
         try{
             String token = parseBearerToken(request);
             log.info("Filter is running");
 
-            if(token!=null && !token.equalsIgnoreCase("null")){
+            if(token!=null && !tokenBlacklistService.isBlacklisted(token)){
                 String email = tokenProvider.validateTokenAndGetUser(token);
                 log.info("Authenticated user email: "+email);
 
@@ -45,8 +49,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                 securityContext.setAuthentication(authentication);
                 SecurityContextHolder.setContext(securityContext);
+            }else {
+                log.info("Token is blacklisted");
             }
-
         }catch(Exception ex){
             logger.error("Could not set user authentication in security context", ex);
 

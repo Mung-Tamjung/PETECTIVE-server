@@ -5,6 +5,7 @@ import com.mungtamjung.petective.dto.UserDTO;
 import com.mungtamjung.petective.model.UserEntity;
 import com.mungtamjung.petective.security.TokenProvider;
 import com.mungtamjung.petective.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -91,5 +92,30 @@ public class UserController {
             ResponseDTO responseDTO = new ResponseDTO(false, 400, "Login failed", null);
             return ResponseEntity.badRequest().body(responseDTO);
         }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request){
+        try{
+            // 클라이언트에서 토큰을 제거하도록 요청 (옵션: 서버에서 블랙리스트 처리 가능)
+            String authHeader = request.getHeader("Authorization");
+
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                String token = authHeader.substring(7);
+
+                // 필요하다면 해당 토큰을 블랙리스트에 추가하거나 다른 방법으로 처리 가능
+                // 예: Redis에 토큰을 블랙리스트로 등록하여 이후 사용을 방지
+
+                log.info("Token invalidated: " + token);
+            }
+
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, null);
+            return ResponseEntity.ok().body(responseDTO);
+        }catch (Exception e){
+            log.error("Logout failed", e);
+            ResponseDTO responseDTO = new ResponseDTO(false, 400, "Logout failed", null);
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+
     }
 }
