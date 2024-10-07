@@ -20,7 +20,6 @@ public class PostImageEntity {
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
 
-    private String breed; //종 분석 결과
     private Integer category; //이미지 종류: 실종글 0/제보글 1
 
     @JsonBackReference
