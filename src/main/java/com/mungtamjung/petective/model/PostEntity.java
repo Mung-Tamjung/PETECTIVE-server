@@ -42,7 +42,7 @@ public class PostEntity {
     private LocalDate lostDate;
 
     private String breed;
-
+    private List encoding;
     //lostLocation
 
     @JsonManagedReference

@@ -59,6 +59,7 @@ public class PostController {
                     .lostDate(postDTO.getLostDate())
                     .images(new ArrayList<>())
                     .breed(postDTO.getBreed())
+                    .encoding((List) postDTO.getEncoding())
                     .build();
 
             PostEntity createdPost = postService.create(postEntity, multipartFiles);
