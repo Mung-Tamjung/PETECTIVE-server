@@ -1,6 +1,7 @@
 package com.mungtamjung.petective.repository;
 
 import com.mungtamjung.petective.model.PostEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<PostEntity, String> {
-    List<PostEntity> findByPostCategory(int postCategory);
+    Page<PostEntity> findByPostCategory(int postCategory, Pageable pageable);
     Boolean existsByPostCategory(int postCategory);
     List<PostEntity> findByWriter(String writer);
 
@@ -21,6 +22,10 @@ public interface PostRepository extends JpaRepository<PostEntity, String> {
             "(LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(p.writer) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND " +
-            "p.postCategory = :category")
-    List<PostEntity> searchPostsByCategory(@Param("keyword") String keyword, @Param("category") int category, Pageable pageable);
+            "p.postCategory = :postCategory AND " +
+            "p.petCategory = :petCategory")
+    Page<PostEntity> searchPostsByCategory(@Param("keyword") String keyword,
+                                                         @Param("postCategory") int postCategory,
+                                                         @Param("petCategory") int petCategory,
+                                                         Pageable pageable);
 }

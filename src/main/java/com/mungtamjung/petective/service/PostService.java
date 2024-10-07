@@ -7,8 +7,10 @@ import com.mungtamjung.petective.repository.PostImageRepository;
 import com.mungtamjung.petective.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -79,12 +81,13 @@ public class PostService {
     }
 
     @Transactional
-    public List<PostEntity> retrievePostList(final int postCategory){
+    public Page<PostEntity> retrievePostList(final int postCategory, Pageable pageable){
         if(!postRepository.existsByPostCategory(postCategory)){
             log.warn("PostCategory doesn't exists {}", postCategory);
             throw new RuntimeException("PostCategory doesn't exists");
         }
-        return postRepository.findByPostCategory(postCategory);
+
+        return postRepository.findByPostCategory(postCategory, pageable);
     }
     public Optional<PostEntity> retrievePost(final String postId){
         return postRepository.findById(postId);
@@ -94,14 +97,16 @@ public class PostService {
         return postRepository.findByWriter(writer);
     }
 
-    public List<PostEntity> searchLostPosts(String keyword, int offset, int limit) {
+    public List<PostEntity> searchLostPosts(String keyword, int petCategory, int offset, int limit) {
         Pageable pageable = PageRequest.of(offset, limit);
-        return postRepository.searchPostsByCategory(keyword, 0, pageable); // 0: 실종 글
+        Page<PostEntity> postPage = postRepository.searchPostsByCategory(keyword, 0, petCategory, pageable); // 0: 실종 글
+        return postPage.getContent();
     }
 
-    public List<PostEntity> searchFindPosts(String keyword, int offset, int limit) {
+    public List<PostEntity> searchFindPosts(String keyword, int petCategory, int offset, int limit) {
         Pageable pageable = PageRequest.of(offset, limit);
-        return postRepository.searchPostsByCategory(keyword, 1, pageable); // 1: 발견 글
+        Page<PostEntity> postPage = postRepository.searchPostsByCategory(keyword, 1, petCategory, pageable); // 1: 발견 글
+        return postPage.getContent();
     }
 
     public List<PostEntity> retrieveRelatedPost(String breed){

@@ -2,6 +2,8 @@ package com.mungtamjung.petective.service;
 
 import com.mungtamjung.petective.model.UserEntity;
 import com.mungtamjung.petective.repository.UserRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,6 +15,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    private String jwtSecret = "your_jwt_secret";
 
     public UserEntity create(final UserEntity userEntity){
         if(userEntity ==null || userEntity.getEmail()==null || userEntity.getUsername()==null || userEntity.getPassword()==null){

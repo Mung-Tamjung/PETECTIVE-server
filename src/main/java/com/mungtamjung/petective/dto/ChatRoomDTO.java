@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatDTO {
-    private String sender; //user id
-    private String receiver; //user id
-    private String message;
-
-    private String chatRoom; //chatroom id
-    //private String sentTime;
+public class ChatRoomDTO {
+    private String sender;
+    private String receiver;
 }
