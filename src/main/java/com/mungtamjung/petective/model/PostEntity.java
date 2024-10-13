@@ -42,7 +42,9 @@ public class PostEntity {
     private LocalDate lostDate;
 
     private String breed;
-    private List encoding;
+
+    @Column(length = 10000)
+    private List<Double> encoding;
     //lostLocation
 
     @JsonManagedReference
@@ -54,5 +56,4 @@ public class PostEntity {
         this.images.add(postImageEntity);
         postImageEntity.setPostEntity(this);
     }
-
 }
