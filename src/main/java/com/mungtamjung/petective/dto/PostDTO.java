@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.awt.*;
+import java.util.*;
 import java.time.LocalDate;
 
 @Data
@@ -24,7 +24,7 @@ public class PostDTO {
     //private String lostLocation;
 
     private String breed;
-    private List encoding;
+    private List<Double> encoding;
 
     public PostDTO(final PostEntity entity){
         this.id = entity.getId();
