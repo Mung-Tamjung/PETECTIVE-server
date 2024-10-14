@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ExerciseRepository extends JpaRepository<ExerciseEntity, String> {
-    List<ExerciseEntity> findByUseridAndPetidAndDate(String userid, String petid, LocalDate date);
+    List<ExerciseEntity> findByUseridAndDate(String userid, LocalDate date);
 }

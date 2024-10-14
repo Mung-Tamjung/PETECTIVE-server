@@ -19,8 +19,8 @@ public class ExerciseService {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
-    public List<ExerciseEntity> getDailyExerciseRecords(String userid, String petid, LocalDate date) {
-        return exerciseRepository.findByUseridAndPetidAndDate(userid, petid, date);
+    public List<ExerciseEntity> getDailyExerciseRecords(String userid, LocalDate date) {
+        return exerciseRepository.findByUseridAndDate(userid, date);
     }
 
     public ExerciseEntity getExerciseRecordDetail(String recordId) {

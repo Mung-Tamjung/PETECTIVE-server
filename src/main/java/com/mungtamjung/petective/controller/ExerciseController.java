@@ -24,14 +24,13 @@ public class ExerciseController {
 
     // 날짜별 산책 기록 목록 조회
     @GetMapping("/dailyrecord")
-    public ResponseEntity<?> getDailyExerciseRecords(@RequestParam("petid") String petid,
-                                                     @RequestParam("year") int year,
+    public ResponseEntity<?> getDailyExerciseRecords(@RequestParam("year") int year,
                                                      @RequestParam("month") int month,
                                                      @RequestParam("day") int day) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userid = authentication.getName();
         LocalDate date = LocalDate.of(year, month, day);
-        List<ExerciseEntity> records = exerciseService.getDailyExerciseRecords(userid, petid, date);
+        List<ExerciseEntity> records = exerciseService.getDailyExerciseRecords(userid, date);
         ResponseDTO responseDTO = new ResponseDTO(true, 200, null, records);
         return ResponseEntity.ok().body(responseDTO);
     }

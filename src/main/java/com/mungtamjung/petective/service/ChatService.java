@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class ChatService {
@@ -31,6 +33,14 @@ public class ChatService {
         chatEntity.setChatRoom(chatRoom); // chatRoomEntity로 설정
 
         return chatRepository.save(chatEntity);
+    }
+
+    public List<ChatEntity> getChatHistory(String chatRoomId){
+        ChatRoomEntity chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new RuntimeException("Chat room not found"));
+
+        // 채팅방에 속한 모든 메시지를 가져옴
+        return chatRepository.findByChatRoomOrderByCreatedAt(chatRoom);
     }
 
 }

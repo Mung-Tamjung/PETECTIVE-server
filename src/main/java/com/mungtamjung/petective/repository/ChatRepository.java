@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ChatRepository extends JpaRepository<ChatEntity, String> {
-    List<ChatEntity> findByChatRoom(ChatRoomEntity chatRoom); // ChatRoomEntity로 검색
+    // 채팅방 내 메시지 시간 순으로 가져옴
+    List<ChatEntity> findByChatRoomOrderByCreatedAt(ChatRoomEntity chatRoom);
 }
