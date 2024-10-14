@@ -24,6 +24,7 @@ public class PostDTO {
     //private String lostLocation;
 
     private String breed;
+    //private double[] encoding;
     private List<Double> encoding;
 
     public PostDTO(final PostEntity entity){
