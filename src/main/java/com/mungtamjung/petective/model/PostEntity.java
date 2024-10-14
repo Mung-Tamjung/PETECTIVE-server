@@ -7,9 +7,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -17,6 +20,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class PostEntity {
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -46,7 +50,9 @@ public class PostEntity {
     @Column(length = 10000)
     @Convert(converter = StringListConverter.class)
     private List<Double> encoding;
-    //private double[] encoding;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
     //lostLocation
 
     @JsonManagedReference
