@@ -44,7 +44,9 @@ public class PostEntity {
     private String breed;
 
     @Column(length = 10000)
+    @Convert(converter = StringListConverter.class)
     private List<Double> encoding;
+    //private double[] encoding;
     //lostLocation
 
     @JsonManagedReference

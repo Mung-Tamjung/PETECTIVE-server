@@ -49,7 +49,7 @@ public class PostController {
             // 현재 인증된 사용자 정보 가져오기
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String writer = authentication.getName(); // 사용자 이름 (username)을 가져옴
-            //log.info(String.valueOf(postDTO.getEncoding().size()));
+            //double[] encoding = postDTO.getEncoding();
 
             PostEntity postEntity = PostEntity.builder()
                     .postCategory(postDTO.getPostCategory())
@@ -60,7 +60,7 @@ public class PostController {
                     .lostDate(postDTO.getLostDate())
                     .images(new ArrayList<>())
                     .breed(postDTO.getBreed())
-                    .encoding(postDTO.getEncoding() )
+                    .encoding(postDTO.getEncoding())
                     .build();
 
             PostEntity createdPost = postService.create(postEntity, multipartFiles);
