@@ -29,7 +29,7 @@ public class PostDTO {
 
     public PostDTO(final PostEntity entity){
         this.id = entity.getId();
-        this.writer = entity.getWriter();
+        //this.writer = entity.getWriter();
         this.postCategory = entity.getPostCategory();
         this.petCategory = entity.getPetCategory();
         this.title = entity.getTitle();
@@ -40,7 +40,7 @@ public class PostDTO {
     public static PostEntity toEntity(final PostDTO dto){
         return PostEntity.builder()
                 .id(dto.getId())
-                .writer(dto.getWriter())
+                //.writer(dto.getWriter())
                 .postCategory(dto.getPostCategory())
                 .petCategory(dto.getPetCategory())
                 .title(dto.getTitle())

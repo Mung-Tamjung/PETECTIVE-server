@@ -1,6 +1,7 @@
 package com.mungtamjung.petective.repository;
 
 import com.mungtamjung.petective.model.PostEntity;
+import com.mungtamjung.petective.model.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +15,7 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<PostEntity, String> {
     Page<PostEntity> findByPostCategory(int postCategory, Pageable pageable);
     Boolean existsByPostCategory(int postCategory);
-    List<PostEntity> findByWriter(String writer);
+    List<PostEntity> findByWriter(UserEntity writer);
 
     List<PostEntity> findByBreed(String breed);
 
