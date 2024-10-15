@@ -1,10 +1,14 @@
 package com.mungtamjung.petective.service;
 
 import com.amazonaws.util.CollectionUtils;
+import com.mungtamjung.petective.dto.PostDetailDTO;
+import com.mungtamjung.petective.dto.PostSimpleDTO;
 import com.mungtamjung.petective.model.PostImageEntity;
 import com.mungtamjung.petective.model.PostEntity;
+import com.mungtamjung.petective.model.UserEntity;
 import com.mungtamjung.petective.repository.PostImageRepository;
 import com.mungtamjung.petective.repository.PostRepository;
+import com.mungtamjung.petective.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +35,9 @@ public class PostService {
 
     @Autowired
     private PostImageRepository postImageRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional
     public PostEntity create(final PostEntity postEntity, List<MultipartFile> multipartFiles) {
@@ -81,20 +89,28 @@ public class PostService {
     }
 
     @Transactional
-    public Page<PostEntity> retrievePostList(final int postCategory, Pageable pageable){
+    public Page<PostSimpleDTO> retrievePostList(final int postCategory, Pageable pageable){
         if(!postRepository.existsByPostCategory(postCategory)){
             log.warn("PostCategory doesn't exists {}", postCategory);
             throw new RuntimeException("PostCategory doesn't exists");
         }
+        //return
+        Page<PostEntity> postOriginalList = postRepository.findByPostCategory(postCategory, pageable);
+        Page<PostSimpleDTO> postSimpleList = new PostSimpleDTO().toDtoList(postOriginalList);
 
-        return postRepository.findByPostCategory(postCategory, pageable);
+        return postSimpleList;
     }
-    public Optional<PostEntity> retrievePost(final String postId){
-        return postRepository.findById(postId);
+    public PostDetailDTO retrievePost(final String postId){
+        PostEntity post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        //return postRepository.findById(postId);
+        return new PostDetailDTO().toPostDetailDto(post);
     }
 
     public List<PostEntity> getPostsByWriter(String writer) {
-        return postRepository.findByWriter(writer);
+        UserEntity user = userRepository.findById(writer)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return postRepository.findByWriter(user);
     }
 
     public List<PostEntity> searchLostPosts(String keyword, int petCategory, int offset, int limit) {

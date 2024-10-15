@@ -1,6 +1,8 @@
 package com.mungtamjung.petective.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.mungtamjung.petective.dto.PostDetailDTO;
+import com.mungtamjung.petective.dto.PostSimpleDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -39,8 +42,10 @@ public class PostEntity {
     @Column(nullable=false)
     private String content;
 
-    @Column(nullable=false)
-    private String writer; //userId
+    //@Column(nullable=false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id", nullable = false)
+    private UserEntity writer; //userId
 
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDate lostDate;
@@ -64,4 +69,19 @@ public class PostEntity {
         this.images.add(postImageEntity);
         postImageEntity.setPostEntity(this);
     }
+
+    public PostSimpleDTO toPostSimpleDto(PostEntity post){
+        String image_url = post.getImages().get(0).getUrl();
+        return PostSimpleDTO.builder()
+                .id(post.getId())
+                .writer_name(post.getWriter().getUsername())
+                .postCategory(post.getPostCategory())
+                .title(post.getTitle())
+                .lostDate(post.getLostDate())
+                .createdAt(post.getCreatedAt())
+                .image(image_url)
+                .build();
+    }
+
+
 }
