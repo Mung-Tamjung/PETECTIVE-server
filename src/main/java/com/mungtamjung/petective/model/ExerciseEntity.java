@@ -1,9 +1,6 @@
 package com.mungtamjung.petective.model;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,8 +37,8 @@ public class ExerciseEntity {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime end; // 산책 종료 시간
 
-    @ElementCollection
-    private List<Point> path; // 위치 포인트 리스트
+    @Convert(converter = LatLngListConverter.class)
+    private List<LatLng> path;
 
     private String memo; // 산책 기록 메모
 

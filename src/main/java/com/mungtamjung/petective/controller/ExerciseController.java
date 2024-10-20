@@ -58,13 +58,13 @@ public class ExerciseController {
     }
 
     // 산책 종료
-    @PostMapping("/end")
-    public ResponseEntity<?> endExercise(@RequestBody ExerciseDTO exerciseDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userid = authentication.getName();
-        ExerciseEntity exerciseEntity = exerciseService.endExercise(userid, exerciseDTO);
-        ResponseDTO responseDTO = new ResponseDTO(true, 200, null, exerciseEntity);
-        return ResponseEntity.ok().body(responseDTO);
-    }
+//    @PostMapping("/end")
+//    public ResponseEntity<?> endExercise(@RequestBody ExerciseDTO exerciseDTO) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String userid = authentication.getName();
+//        ExerciseEntity exerciseEntity = exerciseService.endExercise(userid, exerciseDTO);
+//        ResponseDTO responseDTO = new ResponseDTO(true, 200, null, exerciseEntity);
+//        return ResponseEntity.ok().body(responseDTO);
+//    }
 
 }

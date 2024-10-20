@@ -2,6 +2,7 @@ package com.mungtamjung.petective.service;
 
 import com.mungtamjung.petective.dto.ExerciseDTO;
 import com.mungtamjung.petective.model.ExerciseEntity;
+import com.mungtamjung.petective.model.LatLng;
 import com.mungtamjung.petective.repository.ExerciseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class ExerciseService {
         ExerciseEntity exerciseEntity = optionalExerciseEntity.get();
         exerciseEntity.setPetid(exerciseDTO.getPetid());
         exerciseEntity.setEnd(exerciseDTO.getEnd());
-        exerciseEntity.setPath((List<Point>) exerciseDTO.getPath());
+        exerciseEntity.setPath((List<LatLng>) exerciseDTO.getPath());
         exerciseEntity.setMemo(exerciseDTO.getMemo());
 
         return exerciseRepository.save(exerciseEntity);
