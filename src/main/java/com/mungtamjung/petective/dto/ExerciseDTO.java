@@ -1,12 +1,11 @@
 package com.mungtamjung.petective.dto;
 
+import com.mungtamjung.petective.model.LatLng;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.awt.*;
+import java.util.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -21,6 +20,6 @@ public class ExerciseDTO {
     private LocalDate date;
     private LocalDateTime start;
     private LocalDateTime end;
-    private Point path;
+    private List<LatLng> path;
     private String memo;
 }

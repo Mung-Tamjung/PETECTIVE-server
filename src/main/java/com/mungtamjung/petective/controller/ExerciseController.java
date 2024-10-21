@@ -47,24 +47,17 @@ public class ExerciseController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
-    // 산책 시작
-    @PostMapping("/start")
-    public ResponseEntity<?> startExercise(@RequestBody ExerciseDTO exerciseDTO) {
+    // 산책 기록
+    @PostMapping("/record")
+    public ResponseEntity<?> recordExercise(@RequestBody ExerciseDTO exerciseDTO){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userid = authentication.getName();
-        ExerciseEntity exerciseEntity = exerciseService.startExercise(userid, exerciseDTO.getStart());
+        exerciseDTO.setUserid(userid);
+
+        ExerciseEntity exerciseEntity = exerciseService.recordExercise(exerciseDTO);
+
         ResponseDTO responseDTO = new ResponseDTO(true, 200, null, exerciseEntity);
         return ResponseEntity.ok().body(responseDTO);
     }
-
-    // 산책 종료
-//    @PostMapping("/end")
-//    public ResponseEntity<?> endExercise(@RequestBody ExerciseDTO exerciseDTO) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String userid = authentication.getName();
-//        ExerciseEntity exerciseEntity = exerciseService.endExercise(userid, exerciseDTO);
-//        ResponseDTO responseDTO = new ResponseDTO(true, 200, null, exerciseEntity);
-//        return ResponseEntity.ok().body(responseDTO);
-//    }
 
 }

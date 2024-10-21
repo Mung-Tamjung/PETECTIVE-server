@@ -28,25 +28,16 @@ public class ExerciseService {
         return exerciseRepository.findById(recordId).orElse(null);
     }
 
-    public ExerciseEntity startExercise(String userid, LocalDateTime start) {
+    public ExerciseEntity recordExercise(ExerciseDTO exerciseDTO) {
         ExerciseEntity exerciseEntity = ExerciseEntity.builder()
-                .userid(userid)
-                .start(start)
+                .userid(exerciseDTO.getUserid())
+                .petid(exerciseDTO.getPetid())
+                .date(exerciseDTO.getDate())
+                .start(exerciseDTO.getStart())
+                .end(exerciseDTO.getEnd())
+                .path(exerciseDTO.getPath())
+                .memo(exerciseDTO.getMemo())
                 .build();
-        return exerciseRepository.save(exerciseEntity);
-    }
-
-    public ExerciseEntity endExercise(String userid, ExerciseDTO exerciseDTO) {
-        Optional<ExerciseEntity> optionalExerciseEntity = exerciseRepository.findById(exerciseDTO.getId());
-        if (!optionalExerciseEntity.isPresent()) {
-            throw new RuntimeException("Exercise record not found");
-        }
-
-        ExerciseEntity exerciseEntity = optionalExerciseEntity.get();
-        exerciseEntity.setPetid(exerciseDTO.getPetid());
-        exerciseEntity.setEnd(exerciseDTO.getEnd());
-        exerciseEntity.setPath((List<LatLng>) exerciseDTO.getPath());
-        exerciseEntity.setMemo(exerciseDTO.getMemo());
 
         return exerciseRepository.save(exerciseEntity);
     }

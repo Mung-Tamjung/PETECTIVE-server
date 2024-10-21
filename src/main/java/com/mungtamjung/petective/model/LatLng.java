@@ -4,6 +4,10 @@ public class LatLng {
     private double latitude;
     private double longitude;
 
+    // 기본 생성자
+    public LatLng(){
+    }
+
     // 생성자
     public LatLng(double latitude, double longitude) {
         this.latitude = latitude;
