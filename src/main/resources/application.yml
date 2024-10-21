@@ -19,7 +19,8 @@ spring:
         format_sql: true
         use_sql_comments: true
     hibernate:
-      ddl-auto: create #create: 매번 테이블 새로 생성 / update: 테이블 상태 유지
+      #hbm2ddl.auto: update
+      ddl-auto: update #create: 매번 테이블 새로 생성 / update: 테이블 상태 유지 / validate:
     open-in-view: false
     show_sql: true
 
