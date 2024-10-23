@@ -41,7 +41,7 @@ public class ExerciseController {
         ExerciseEntity record = exerciseService.getExerciseRecordDetail(recordId);
         if (record == null) {
             ResponseDTO responseDTO = new ResponseDTO(false, 404, "Record not found", null);
-            return ResponseEntity.status(404).body(responseDTO);
+            return ResponseEntity.status(400).body(responseDTO);
         }
         ResponseDTO responseDTO = new ResponseDTO(true, 200, null, record);
         return ResponseEntity.ok().body(responseDTO);
