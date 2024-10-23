@@ -42,11 +42,6 @@ public class PetService {
             throw new RuntimeException("Invalid arguements");
         }
 
-        if(petRepository.existsByPetname(petname)){
-            log.warn("Pet name already exists {}", petname);
-            throw new RuntimeException("Pet name already exists");
-        }
-
         PetEntity createdPet =  petRepository.save(petEntity);
 
         if(!CollectionUtils.isNullOrEmpty(multipartFiles)){
