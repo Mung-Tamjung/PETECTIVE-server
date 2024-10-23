@@ -1,5 +1,6 @@
 package com.mungtamjung.petective.service;
 
+import com.mungtamjung.petective.dto.PostSimpleDTO;
 import com.mungtamjung.petective.model.InterestEntity;
 import com.mungtamjung.petective.model.PostEntity;
 import com.mungtamjung.petective.model.UserEntity;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -41,9 +43,21 @@ public class InterestService {
         return interestRepository.save(interest);
     }
 
-    public List<InterestEntity> getInterestsByUser(String userId){
+    public List<PostSimpleDTO> getInterestPostsByUser(String userId){
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        return interestRepository.findByUserId(user);
+
+        List<InterestEntity> interests = interestRepository.findByUserId(user);
+        return interests.stream()
+                .map(interest -> PostSimpleDTO.builder()
+                        .id(interest.getPostId().getId())
+                        .writer_name(interest.getPostId().getWriter().getUsername())
+                        .postCategory(interest.getPostId().getPostCategory())
+                        .title(interest.getPostId().getTitle())
+                        .createdAt(interest.getPostId().getCreatedAt())
+                        .lostDate(interest.getPostId().getLostDate())
+                        .image(interest.getPostId().getImages().isEmpty() ? null : interest.getPostId().getImages().get(0).getUrl())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

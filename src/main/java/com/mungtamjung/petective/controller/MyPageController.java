@@ -1,5 +1,6 @@
 package com.mungtamjung.petective.controller;
 
+import com.mungtamjung.petective.dto.PostSimpleDTO;
 import com.mungtamjung.petective.dto.ResponseDTO;
 import com.mungtamjung.petective.model.InterestEntity;
 import com.mungtamjung.petective.model.PostEntity;
@@ -42,8 +43,8 @@ public class MyPageController {
     public ResponseEntity<?> getInterest(Authentication authentication) {
         try {
             String userId = authentication.getName();
-            List<InterestEntity> interests = interestService.getInterestsByUser(userId);
-            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, interests);
+            List<PostSimpleDTO> interestPosts = interestService.getInterestPostsByUser(userId);
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, interestPosts);
             return ResponseEntity.ok().body(responseDTO);
         } catch (Exception e) {
             ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
