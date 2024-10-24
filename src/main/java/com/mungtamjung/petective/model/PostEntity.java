@@ -58,7 +58,9 @@ public class PostEntity {
 
     @CreatedDate
     private LocalDateTime createdAt;
-    //lostLocation
+
+    @Column(nullable=false)
+    //private lostLocation
 
     @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "postEntity") //cascade 추가

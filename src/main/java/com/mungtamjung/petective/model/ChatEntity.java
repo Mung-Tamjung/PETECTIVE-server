@@ -23,14 +23,18 @@ public class ChatEntity{
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
 
+    @Column(name = "sender")
     private String sender;
+
+    @Column(name = "receiver")
     private String receiver;
+
     private String message;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY) // 지연 로딩
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roomId") // FK
     private ChatRoomEntity chatRoom;
 

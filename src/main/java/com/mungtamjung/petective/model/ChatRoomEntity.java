@@ -1,5 +1,6 @@
 package com.mungtamjung.petective.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -17,11 +18,15 @@ public class ChatRoomEntity {
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
 
-    private String sender; //채팅방 생성자 userID
-    private String receiver; //채팅방 수신자 userID
+    @Column(name = "sender")
+    private String sender;
+
+    @Column(name = "receiver")
+    private String receiver;
 
     // 연관된 채팅 메시지들
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<ChatEntity> messages;
 
     //게시글과 연관 추가
