@@ -58,11 +58,11 @@ public class PostController {
                     .petCategory(postDTO.getPetCategory())
                     .title(postDTO.getTitle())
                     .content(postDTO.getContent())
-                    //.writer(writer) // writer에 로그인된 사용자 정보 설정
                     .lostDate(postDTO.getLostDate())
                     .images(new ArrayList<>())
                     .breed(postDTO.getBreed())
                     .encoding(postDTO.getEncoding())
+                    .lostLocation(postDTO.getLostLocation())
                     .build();
             postEntity.setWriter(writer);
 
