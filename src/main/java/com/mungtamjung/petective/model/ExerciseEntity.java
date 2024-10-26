@@ -38,6 +38,7 @@ public class ExerciseEntity {
     private LocalDateTime end; // 산책 종료 시간
 
     @Lob
+    @Column(columnDefinition = "LONGTEXT", nullable = false)
     @Convert(converter = LatLngListConverter.class)
     private List<LatLng> path;
 
