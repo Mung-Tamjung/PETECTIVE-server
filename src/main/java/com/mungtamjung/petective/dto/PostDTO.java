@@ -1,5 +1,6 @@
 package com.mungtamjung.petective.dto;
 
+import com.mungtamjung.petective.model.LatLng;
 import com.mungtamjung.petective.model.PostEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class PostDTO {
     private String title;
     private String content;
     private LocalDate lostDate;
-    //private String lostLocation;
+    private LatLng lostLocation;
 
     private String breed;
     //private double[] encoding;
