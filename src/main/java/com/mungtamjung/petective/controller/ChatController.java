@@ -40,7 +40,7 @@ public class ChatController {
             String userId = authentication.getName();
             System.out.println("Current user ID: " + userId); // 현재 로그인된 사용자 ID 로그
 
-            List<ChatRoomEntity> chatRoomList = chatRoomService.retrieveChatRoomList(userId);
+            List<ChatRoomDTO> chatRoomList = chatRoomService.retrieveChatRoomList(userId);
             ResponseDTO responseDTO = new ResponseDTO(true, 200,null, chatRoomList);
             return ResponseEntity.ok().body(responseDTO);
         }catch(Exception e){
@@ -62,7 +62,7 @@ public class ChatController {
                     .orElseThrow(() -> new RuntimeException("User not found")); // 사용자가 없을 경우 예외 처리
 
             // 채팅방 생성
-            ChatRoomEntity chatRoom = chatRoomService.createChatRoom(postId, sender.getId());
+            ChatRoomEntity chatRoom = chatRoomService.createChatRoom(postId, sender);
 
             ResponseDTO responseDTO = new ResponseDTO(true, 200,null, chatRoom);
             return ResponseEntity.ok().body(responseDTO);

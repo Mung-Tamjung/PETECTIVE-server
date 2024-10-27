@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoomEntity, String> {
-    @Query("SELECT c FROM ChatRoomEntity c WHERE c.sender = :sender OR c.receiver = :receiver")
-    List<ChatRoomEntity> findBySenderAndReceiver(@Param("sender") String sender, @Param("receiver") String receiver);
+    @Query("SELECT c FROM ChatRoomEntity c WHERE c.sender = :sender AND c.receiver = :receiver")
+    Optional<ChatRoomEntity> findBySenderAndReceiver(@Param("sender") UserEntity sender, @Param("receiver") UserEntity receiver);
 
-    @Query("SELECT c FROM ChatRoomEntity c WHERE c.sender = :userId OR c.receiver = :userId")
+    @Query("SELECT c FROM ChatRoomEntity c WHERE c.sender.id = :userId OR c.receiver.id = :userId")
     List<ChatRoomEntity> findChatRoomsByUser(@Param("userId") String userId);
 
 }

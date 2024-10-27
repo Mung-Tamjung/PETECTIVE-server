@@ -26,11 +26,13 @@ public class ChatEntity{
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
 
-    @Column(name = "sender")
-    private String sender;
+    @ManyToOne
+    @JoinColumn(name = "sender_id",referencedColumnName = "id")
+    private UserEntity sender;
 
-    @Column(name = "receiver")
-    private String receiver;
+    @ManyToOne
+    @JoinColumn(name = "receiver_id",referencedColumnName = "id")
+    private UserEntity receiver;
 
     private String message;
 
