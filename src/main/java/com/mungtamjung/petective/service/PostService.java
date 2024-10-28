@@ -107,10 +107,16 @@ public class PostService {
         return new PostDetailDTO().toPostDetailDto(post);
     }
 
-    public List<PostEntity> getPostsByWriter(String writer) {
+    public List<PostSimpleDTO> getPostsByWriter(String writer) {
         UserEntity user = userRepository.findById(writer)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        return postRepository.findByWriter(user);
+        List<PostEntity> posts = postRepository.findByWriter(user);
+        List<PostSimpleDTO> dtos = new ArrayList<>();
+        for(int i=0; i<posts.size();i++){
+            PostSimpleDTO dto = posts.get(i).toPostSimpleDto(posts.get(i));
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
     public List<PostEntity> searchLostPosts(String keyword, int petCategory, int offset, int limit) {

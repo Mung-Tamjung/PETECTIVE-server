@@ -29,7 +29,7 @@ public class MyPageController {
     @GetMapping("/mypost")
     public ResponseEntity<?> getUserPostList(@RequestParam String writer) {
         try {
-            List<PostEntity> userPostList = postService.getPostsByWriter(writer);
+            List<PostSimpleDTO> userPostList = postService.getPostsByWriter(writer);
             ResponseDTO responseDTO = new ResponseDTO(true, 200, null, userPostList);
             return ResponseEntity.ok().body(responseDTO);
         } catch (Exception e) {
