@@ -81,7 +81,7 @@ public class UserController {
             final UserDTO responseUserDTO = userDTO.builder()
                     .email(user.getEmail())
                     .id(user.getId())
-                    .username(userDTO.getUsername())
+                    .username(user.getUsername())
                     .token(token)
                     .build();
 
