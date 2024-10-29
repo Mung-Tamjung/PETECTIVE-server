@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<PostEntity, String> {
+    @Query("SELECT p FROM PostEntity p WHERE p.postCategory = :postCategory ORDER BY p.createdAt DESC")
     Page<PostEntity> findByPostCategory(int postCategory, Pageable pageable);
     Boolean existsByPostCategory(int postCategory);
     List<PostEntity> findByWriter(UserEntity writer);
