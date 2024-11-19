@@ -2,6 +2,7 @@ package com.mungtamjung.petective.service;
 
 import com.amazonaws.util.CollectionUtils;
 import com.mungtamjung.petective.dto.PostDetailDTO;
+import com.mungtamjung.petective.dto.PostMapDTO;
 import com.mungtamjung.petective.dto.PostSimpleDTO;
 import com.mungtamjung.petective.model.PostImageEntity;
 import com.mungtamjung.petective.model.PostEntity;
@@ -100,12 +101,28 @@ public class PostService {
 
         return postSimpleList;
     }
+
+    @Transactional
+    public List<PostMapDTO> retrivePostMap(final int postCategory){
+        if(!postRepository.existsByPostCategory(postCategory)){
+            log.warn("PostCategory doesn't exists {}", postCategory);
+            throw new RuntimeException("PostCategory doesn't exists");
+        }
+        List<PostEntity> postOriginalList = postRepository.findByPostCategory(postCategory);
+        List<PostMapDTO> dtos = new ArrayList<>();
+        for(int i=0; i<postOriginalList.size();i++){
+            PostMapDTO dto = postOriginalList.get(i).toPostMapDto(postOriginalList.get(i));
+            dtos.add(dto);
+        }
+        return dtos;
+    }
     public PostDetailDTO retrievePost(final String postId){
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         //return postRepository.findById(postId);
         return new PostDetailDTO().toPostDetailDto(post);
     }
+
 
     public List<PostSimpleDTO> getPostsByWriter(String writer) {
         UserEntity user = userRepository.findById(writer)

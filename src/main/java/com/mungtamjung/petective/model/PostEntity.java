@@ -2,6 +2,7 @@ package com.mungtamjung.petective.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mungtamjung.petective.dto.PostDetailDTO;
+import com.mungtamjung.petective.dto.PostMapDTO;
 import com.mungtamjung.petective.dto.PostSimpleDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -86,5 +87,13 @@ public class PostEntity {
                 .build();
     }
 
-
+    public PostMapDTO toPostMapDto(PostEntity post){
+        String image_url = post.getImages().get(0).getUrl();
+        return PostMapDTO.builder()
+                .id(post.getId())
+                .image(image_url)
+                .lostLocation(post.getLostLocation())
+                .petCategory(post.getPetCategory())
+                .build();
+    }
 }
