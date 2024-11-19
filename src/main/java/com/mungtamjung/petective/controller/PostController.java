@@ -1,14 +1,12 @@
 package com.mungtamjung.petective.controller;
 
-import com.mungtamjung.petective.dto.PostDTO;
-import com.mungtamjung.petective.dto.PostDetailDTO;
-import com.mungtamjung.petective.dto.PostSimpleDTO;
-import com.mungtamjung.petective.dto.ResponseDTO;
+import com.mungtamjung.petective.dto.*;
 import com.mungtamjung.petective.model.InterestEntity;
 import com.mungtamjung.petective.model.PostEntity;
 import com.mungtamjung.petective.model.UserEntity;
 import com.mungtamjung.petective.service.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -194,5 +192,18 @@ public class PostController {
             ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
             return ResponseEntity.badRequest().body(responseDTO);
         }
+    }
+
+    @GetMapping("/map")
+    public ResponseEntity<?> getPostMap(){
+        try{
+            List<PostMapDTO> posts = postService.retrivePostMap(0);
+            ResponseDTO responseDTO = new ResponseDTO(true, 200, null, posts);
+            return ResponseEntity.ok().body(responseDTO);
+        }catch(Exception e){
+            ResponseDTO responseDTO = new ResponseDTO(false, 400, e.getMessage(), null);
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
+
     }
 }
