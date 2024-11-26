@@ -1,11 +1,13 @@
 spring:
   application:
     name: petective
+  config:
+    import: optional:file:.env[.properties]
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://database-petective.cnyceqa06ndp.ap-northeast-2.rds.amazonaws.com:3306/petective?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8
-    username: mungtamjung
-    password: mungtamjung2024
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PWD}
   sql:
     init:
       mode: always
@@ -33,8 +35,8 @@ spring:
       stack:
         auto: false
       credentials:
-        access-key: AKIAU6GDWPGGPPRP2XOP
-        secret-key: 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
+        access-key: ${S3_ACCESS_KEY}
+        secret-key: ${S3_SECRET_KEY}
 
 
 
@@ -42,5 +44,5 @@ spring:
 
 
 jwt:
-  issuer: mungtamjung
-  secret_key: pectectivemungtamjungpectectivemungtamjungpectectivemungtamjung
+  issuer: ${JWT_ISSUER}
+  secret_key: ${JWT_SECRET_KEY}
